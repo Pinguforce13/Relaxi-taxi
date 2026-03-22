@@ -14,518 +14,116 @@
     --text: #fffffe;
     --muted: rgba(255,255,255,0.45);
     --accent: #ff8906;
-
-    --catastrofe: #ff4d6d;
-    --catastrofe-bg: rgba(255,77,109,0.12);
-    --criticus: #9d4edd;
-    --criticus-bg: rgba(157,78,221,0.12);
+    --catastrofe: #ff8c69;
+    --catastrofe-bg: rgba(255,140,105,0.10);
+    --criticus: #b39ddb;
+    --criticus-bg: rgba(179,157,219,0.10);
     --coach: #06d6a0;
     --coach-bg: rgba(6,214,160,0.12);
     --dromer: #ffd166;
     --dromer-bg: rgba(255,209,102,0.12);
-    --rebel: #ef476f;
-    --rebel-bg: rgba(239,71,111,0.10);
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* ── NOISE OVERLAY ── */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.4;
-  }
-
-  /* ── LAYOUT ── */
-  .app {
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 0 20px 80px;
-    position: relative;
-  }
-
-  /* ── HEADER ── */
-  header {
-    padding: 36px 0 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .logo {
-    font-family: 'Fraunces', serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    background: linear-gradient(135deg, var(--text), rgba(255,255,255,0.5));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  .logo span { color: var(--accent); -webkit-text-fill-color: var(--accent); }
-
-  .panic-btn {
-    background: linear-gradient(135deg, #ff4d6d, #c9184a);
-    border: none;
-    border-radius: 50px;
-    padding: 10px 20px;
-    color: white;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    transition: transform 0.15s, box-shadow 0.15s;
-    box-shadow: 0 4px 20px rgba(255,77,109,0.35);
-    animation: pulse-panic 2.5s ease-in-out infinite;
-  }
-  .panic-btn:hover { transform: scale(1.05); box-shadow: 0 6px 28px rgba(255,77,109,0.5); }
-  @keyframes pulse-panic {
-    0%, 100% { box-shadow: 0 4px 20px rgba(255,77,109,0.35); }
-    50% { box-shadow: 0 4px 28px rgba(255,77,109,0.6); }
-  }
-
-  /* ── INPUT ZONE ── */
-  .input-zone {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 24px;
-    margin-bottom: 28px;
-  }
-  .input-zone label {
-    display: block;
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-size: 1.05rem;
-    color: var(--muted);
-    margin-bottom: 14px;
-  }
-  .input-row {
-    display: flex;
-    gap: 12px;
-    align-items: flex-end;
-  }
-  textarea {
-    flex: 1;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 14px 16px;
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.95rem;
-    resize: none;
-    height: 80px;
-    transition: border-color 0.2s;
-    line-height: 1.5;
-  }
-  textarea::placeholder { color: var(--muted); }
-  textarea:focus { outline: none; border-color: rgba(255,255,255,0.2); }
-
-  .send-btn {
-    background: var(--accent);
-    border: none;
-    border-radius: 14px;
-    width: 52px;
-    height: 52px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: transform 0.15s, opacity 0.15s;
-    flex-shrink: 0;
-  }
-  .send-btn:hover { transform: scale(1.06); }
-  .send-btn svg { width: 20px; height: 20px; fill: white; }
-
-  /* ── DIALOGUE STAGE ── */
-  .stage-label {
-    font-family: 'Fraunces', serif;
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--muted);
-    margin-bottom: 16px;
-  }
-
-  .dialogue {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin-bottom: 28px;
-  }
-
-  .message {
-    display: flex;
-    gap: 14px;
-    animation: fadeSlide 0.35s ease forwards;
-    opacity: 0;
-  }
-  @keyframes fadeSlide {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .message.user {
-    flex-direction: row-reverse;
-  }
-
-  .avatar {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.3rem;
-    flex-shrink: 0;
-    border: 2px solid transparent;
-  }
-
-  .bubble {
-    max-width: 78%;
-    padding: 14px 18px;
-    border-radius: 18px;
-    font-size: 0.92rem;
-    line-height: 1.6;
-    position: relative;
-  }
-  .message.user .bubble {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 18px 4px 18px 18px;
-    color: var(--text);
-  }
-
-  .character-name {
-    font-size: 0.72rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 5px;
-    opacity: 0.7;
-  }
-  .bubble-text { }
-
-  /* character colours */
-  .char-catastrofe .avatar { background: var(--catastrofe-bg); border-color: var(--catastrofe); }
-  .char-catastrofe .bubble { background: var(--catastrofe-bg); border: 1px solid rgba(255,77,109,0.25); border-radius: 4px 18px 18px 18px; }
-  .char-catastrofe .character-name { color: var(--catastrofe); }
-
-  .char-criticus .avatar { background: var(--criticus-bg); border-color: var(--criticus); }
-  .char-criticus .bubble { background: var(--criticus-bg); border: 1px solid rgba(157,78,221,0.25); border-radius: 4px 18px 18px 18px; }
-  .char-criticus .character-name { color: var(--criticus); }
-
-  .char-coach .avatar { background: var(--coach-bg); border-color: var(--coach); }
-  .char-coach .bubble { background: var(--coach-bg); border: 1px solid rgba(6,214,160,0.25); border-radius: 4px 18px 18px 18px; }
-  .char-coach .character-name { color: var(--coach); }
-
-  .char-dromer .avatar { background: var(--dromer-bg); border-color: var(--dromer); }
-  .char-dromer .bubble { background: var(--dromer-bg); border: 1px solid rgba(255,209,102,0.25); border-radius: 4px 18px 18px 18px; }
-  .char-dromer .character-name { color: var(--dromer); }
-
-  /* ── RESPONSE ACTIONS ── */
-  .response-actions {
-    margin-top: 6px;
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-  .counter-btn {
-    border: 1px solid var(--border);
-    background: transparent;
-    border-radius: 50px;
-    padding: 7px 14px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.78rem;
-    color: var(--muted);
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-  .counter-btn:hover { border-color: var(--coach); color: var(--coach); background: var(--coach-bg); }
-
-  /* ── CHARACTERS PANEL ── */
-  .chars-panel {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 20px 24px;
-    margin-bottom: 24px;
-  }
-  .chars-panel h3 {
-    font-family: 'Fraunces', serif;
-    font-size: 0.9rem;
-    color: var(--muted);
-    margin-bottom: 16px;
-  }
-  .chars-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 10px;
-  }
-  .char-card {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 12px;
-    transition: all 0.2s;
-    cursor: default;
-  }
-  .char-card:hover { transform: translateY(-2px); }
-  .char-top { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
-  .char-emoji { font-size: 1.4rem; }
-  .char-card-name { font-size: 0.8rem; font-weight: 500; }
-  .char-desc { font-size: 0.72rem; color: var(--muted); line-height: 1.4; }
-  .char-power {
-    margin-top: 8px;
-    height: 3px;
-    border-radius: 2px;
-    background: rgba(255,255,255,0.08);
-    overflow: hidden;
-  }
-  .char-power-bar {
-    height: 100%;
-    border-radius: 2px;
-    transition: width 0.8s ease;
-  }
-
-  /* ── PLOT TWIST BADGE ── */
-  .plot-twist {
-    background: linear-gradient(135deg, rgba(255,137,6,0.15), rgba(255,209,102,0.1));
-    border: 1px solid rgba(255,137,6,0.3);
-    border-radius: 14px;
-    padding: 14px 18px;
-    font-size: 0.85rem;
-    color: var(--dromer);
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
-    margin-top: 10px;
-    animation: fadeSlide 0.4s ease forwards;
-    opacity: 0;
-  }
-  .plot-twist .twist-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 1px; }
-
-  /* ── OFFLINE NUDGE ── */
-  .offline-nudge {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 14px 18px;
-    font-size: 0.82rem;
-    color: var(--muted);
-    text-align: center;
-    margin-top: 24px;
-    font-style: italic;
-  }
-
-  /* ══ PANIC MODAL ══ */
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    backdrop-filter: blur(8px);
-    z-index: 1000;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
-  .modal-overlay.open { display: flex; }
-
-  .panic-modal {
-    background: var(--surface);
-    border: 1px solid rgba(255,77,109,0.25);
-    border-radius: 28px;
-    padding: 36px;
-    max-width: 520px;
-    width: 100%;
-    position: relative;
-    animation: modalIn 0.3s cubic-bezier(0.34,1.56,0.64,1) forwards;
-  }
-  @keyframes modalIn {
-    from { opacity: 0; transform: scale(0.88); }
-    to { opacity: 1; transform: scale(1); }
-  }
-
-  .panic-close {
-    position: absolute;
-    top: 16px; right: 16px;
-    background: rgba(255,255,255,0.06);
-    border: none;
-    border-radius: 50%;
-    width: 36px; height: 36px;
-    color: var(--muted);
-    font-size: 1.1rem;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s;
-  }
-  .panic-close:hover { background: rgba(255,255,255,0.12); color: var(--text); }
-
-  .panic-title {
-    font-family: 'Fraunces', serif;
-    font-size: 1.6rem;
-    font-weight: 700;
-    margin-bottom: 6px;
-    color: var(--text);
-  }
-  .panic-sub {
-    color: var(--muted);
-    font-size: 0.88rem;
-    margin-bottom: 28px;
-    line-height: 1.5;
-  }
-
-  /* breathing */
-  .breath-ring-wrap {
-    display: flex;
-    justify-content: center;
-    margin: 20px 0;
-  }
-  .breath-ring {
-    width: 100px; height: 100px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255,77,109,0.3), rgba(255,77,109,0.05));
-    border: 2px solid rgba(255,77,109,0.4);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.75rem;
-    color: var(--text);
-    text-align: center;
-    animation: breathe 8s ease-in-out infinite;
-    transition: all 0.5s;
-  }
-  @keyframes breathe {
-    0%, 100% { transform: scale(1); opacity: 0.8; }
-    50% { transform: scale(1.35); opacity: 1; }
-  }
-  .breath-text { font-size: 0.72rem; text-align: center; color: var(--muted); margin-bottom: 24px; }
-
-  /* 54321 */
-  .grounding-title {
-    font-family: 'Fraunces', serif;
-    font-size: 1.05rem;
-    margin-bottom: 16px;
-    color: var(--text);
-  }
-  .grounding-steps { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
-  .g-step {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    cursor: pointer;
-    transition: all 0.2s;
-    opacity: 0.5;
-  }
-  .g-step.active { opacity: 1; border-color: rgba(255,77,109,0.35); background: rgba(255,77,109,0.06); }
-  .g-step.done { opacity: 0.6; border-color: rgba(6,214,160,0.3); }
-  .g-step.done .g-num { background: var(--coach-bg); color: var(--coach); border-color: var(--coach); }
-  .g-num {
-    width: 32px; height: 32px;
-    border-radius: 50%;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Fraunces', serif;
-    font-weight: 700;
-    font-size: 0.9rem;
-    color: var(--catastrofe);
-    flex-shrink: 0;
-  }
-  .g-info { }
-  .g-label { font-weight: 500; font-size: 0.88rem; }
-  .g-desc { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
-  .g-input {
-    width: 100%;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 8px 12px;
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.82rem;
-    margin-top: 8px;
-    display: none;
-  }
-  .g-step.active .g-input { display: block; }
-  .g-input:focus { outline: none; border-color: rgba(255,77,109,0.4); }
-  .g-input::placeholder { color: var(--muted); }
-
-  .panic-next-btn {
-    width: 100%;
-    background: linear-gradient(135deg, var(--catastrofe), #c9184a);
-    border: none;
-    border-radius: 14px;
-    padding: 14px;
-    color: white;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: opacity 0.2s, transform 0.15s;
-    margin-top: 4px;
-  }
-  .panic-next-btn:hover { transform: scale(1.02); opacity: 0.92; }
-
-  /* ── TYPING INDICATOR ── */
-  .typing {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding: 12px 16px;
-    background: var(--surface2);
-    border-radius: 18px;
-    width: fit-content;
-  }
-  .typing span {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: var(--muted);
-    animation: blink 1.2s infinite;
-  }
-  .typing span:nth-child(2) { animation-delay: 0.2s; }
-  .typing span:nth-child(3) { animation-delay: 0.4s; }
-  @keyframes blink {
-    0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); }
-    40% { opacity: 1; transform: scale(1); }
-  }
-
-  /* ── SCROLLBAR ── */
-  ::-webkit-scrollbar { width: 5px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; overflow-x: hidden; }
+  body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E"); pointer-events:none; z-index:9999; opacity:0.4; }
+  .app { max-width: 760px; margin: 0 auto; padding: 0 20px 80px; }
+  header { padding: 36px 0 24px; display: flex; align-items: center; justify-content: space-between; }
+  .logo { font-family:'Fraunces',serif; font-size:1.5rem; font-weight:700; letter-spacing:-0.02em; background:linear-gradient(135deg,var(--text),rgba(255,255,255,0.5)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .logo span { -webkit-text-fill-color:var(--accent); }
+  .panic-btn { background:linear-gradient(135deg,#ff4d6d,#c9184a); border:none; border-radius:50px; padding:10px 20px; color:white; font-family:'DM Sans',sans-serif; font-size:0.85rem; font-weight:500; cursor:pointer; display:flex; align-items:center; gap:7px; box-shadow:0 4px 20px rgba(255,77,109,0.35); animation:pulse-panic 2.5s ease-in-out infinite; transition:transform 0.15s; }
+  .panic-btn:hover { transform:scale(1.05); }
+  @keyframes pulse-panic { 0%,100%{box-shadow:0 4px 20px rgba(255,77,109,0.35)} 50%{box-shadow:0 4px 28px rgba(255,77,109,0.6)} }
+  .input-zone { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:24px; margin-bottom:28px; }
+  .input-zone label { display:block; font-family:'Fraunces',serif; font-style:italic; font-size:1.05rem; color:var(--muted); margin-bottom:14px; }
+  .input-row { display:flex; gap:12px; align-items:flex-end; }
+  textarea { flex:1; background:var(--surface2); border:1px solid var(--border); border-radius:14px; padding:14px 16px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:0.95rem; resize:none; height:80px; line-height:1.5; transition:border-color 0.2s; }
+  textarea::placeholder { color:var(--muted); }
+  textarea:focus { outline:none; border-color:rgba(255,255,255,0.2); }
+  .send-btn { background:var(--accent); border:none; border-radius:14px; width:52px; height:52px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:transform 0.15s; flex-shrink:0; }
+  .send-btn:hover { transform:scale(1.06); }
+  .send-btn svg { width:20px; height:20px; fill:white; }
+  .stage-label { font-family:'Fraunces',serif; font-size:0.8rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted); margin-bottom:16px; }
+  .dialogue { display:flex; flex-direction:column; gap:16px; margin-bottom:28px; }
+  .message { display:flex; gap:14px; animation:fadeSlide 0.35s ease forwards; opacity:0; }
+  .message.user { flex-direction:row-reverse; }
+  @keyframes fadeSlide { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+  .avatar { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.3rem; flex-shrink:0; border:2px solid transparent; }
+  .bubble { max-width:78%; padding:14px 18px; border-radius:18px; font-size:0.92rem; line-height:1.7; }
+  .message.user .bubble { background:var(--surface2); border:1px solid var(--border); border-radius:18px 4px 18px 18px; }
+  .character-name { font-size:0.72rem; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px; opacity:0.8; }
+  .char-catastrofe .avatar { background:var(--catastrofe-bg); border-color:var(--catastrofe); }
+  .char-catastrofe .bubble { background:var(--catastrofe-bg); border:1px solid rgba(255,140,105,0.2); border-radius:4px 18px 18px 18px; }
+  .char-catastrofe .character-name { color:var(--catastrofe); }
+  .char-criticus .avatar { background:var(--criticus-bg); border-color:var(--criticus); }
+  .char-criticus .bubble { background:var(--criticus-bg); border:1px solid rgba(179,157,219,0.2); border-radius:4px 18px 18px 18px; }
+  .char-criticus .character-name { color:var(--criticus); }
+  .char-coach .avatar { background:var(--coach-bg); border-color:var(--coach); }
+  .char-coach .bubble { background:var(--coach-bg); border:1px solid rgba(6,214,160,0.25); border-radius:4px 18px 18px 18px; }
+  .char-coach .character-name { color:var(--coach); }
+  .char-dromer .avatar { background:var(--dromer-bg); border-color:var(--dromer); }
+  .char-dromer .bubble { background:var(--dromer-bg); border:1px solid rgba(255,209,102,0.25); border-radius:4px 18px 18px 18px; }
+  .char-dromer .character-name { color:var(--dromer); }
+  .response-actions { margin-top:4px; display:flex; gap:8px; flex-wrap:wrap; padding-left:58px; }
+  .counter-btn { border:1px solid var(--border); background:transparent; border-radius:50px; padding:7px 14px; font-family:'DM Sans',sans-serif; font-size:0.78rem; color:var(--muted); cursor:pointer; transition:all 0.2s; }
+  .counter-btn:hover { border-color:var(--coach); color:var(--coach); background:var(--coach-bg); }
+  .chars-panel { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:20px 24px; margin-bottom:24px; }
+  .chars-panel h3 { font-family:'Fraunces',serif; font-size:0.9rem; color:var(--muted); margin-bottom:16px; }
+  .chars-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px; }
+  .char-card { background:var(--surface2); border:1px solid var(--border); border-radius:14px; padding:12px; transition:transform 0.2s; }
+  .char-card:hover { transform:translateY(-2px); }
+  .char-top { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+  .char-emoji { font-size:1.4rem; }
+  .char-card-name { font-size:0.8rem; font-weight:500; }
+  .char-desc { font-size:0.72rem; color:var(--muted); line-height:1.4; }
+  .char-power { margin-top:8px; height:3px; border-radius:2px; background:rgba(255,255,255,0.08); overflow:hidden; }
+  .char-power-bar { height:100%; border-radius:2px; transition:width 0.8s ease; }
+  .plot-twist { background:linear-gradient(135deg,rgba(255,137,6,0.12),rgba(255,209,102,0.08)); border:1px solid rgba(255,137,6,0.25); border-radius:14px; padding:14px 18px; font-size:0.85rem; color:var(--dromer); display:flex; gap:10px; align-items:flex-start; animation:fadeSlide 0.4s ease forwards; opacity:0; }
+  .offline-nudge { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px 18px; font-size:0.82rem; color:var(--muted); text-align:center; font-style:italic; }
+  .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.88); backdrop-filter:blur(10px); z-index:1000; display:none; align-items:center; justify-content:center; padding:20px; }
+  .modal-overlay.open { display:flex; }
+  .panic-modal { background:var(--surface); border:1px solid rgba(255,77,109,0.2); border-radius:28px; padding:36px; max-width:520px; width:100%; position:relative; animation:modalIn 0.3s cubic-bezier(0.34,1.56,0.64,1) forwards; max-height:90vh; overflow-y:auto; }
+  @keyframes modalIn { from{opacity:0;transform:scale(0.88)} to{opacity:1;transform:scale(1)} }
+  .panic-close { position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.06); border:none; border-radius:50%; width:36px; height:36px; color:var(--muted); font-size:1.1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
+  .panic-close:hover { background:rgba(255,255,255,0.12); color:var(--text); }
+  .panic-title { font-family:'Fraunces',serif; font-size:1.6rem; font-weight:700; margin-bottom:8px; }
+  .panic-sub { color:var(--muted); font-size:0.88rem; margin-bottom:24px; line-height:1.6; }
+  .breath-ring-wrap { display:flex; justify-content:center; margin:16px 0; }
+  .breath-ring { width:120px; height:120px; border-radius:50%; background:radial-gradient(circle,rgba(255,77,109,0.2),rgba(255,77,109,0.02)); border:2px solid rgba(255,77,109,0.35); display:flex; align-items:center; justify-content:center; font-size:0.82rem; color:var(--text); text-align:center; line-height:1.5; transition:transform 0.5s ease; }
+  .breath-phase-label { text-align:center; font-size:0.8rem; color:var(--muted); margin-bottom:4px; min-height:20px; }
+  .breath-counter { text-align:center; font-family:'Fraunces',serif; font-size:2.4rem; color:var(--text); margin-bottom:24px; }
+  .panic-next-btn { width:100%; background:linear-gradient(135deg,#ff8c69,#e05a3a); border:none; border-radius:14px; padding:14px; color:white; font-family:'DM Sans',sans-serif; font-size:0.95rem; font-weight:500; cursor:pointer; transition:opacity 0.2s,transform 0.15s; }
+  .panic-next-btn:hover { transform:scale(1.02); opacity:0.92; }
+  .grounding-title { font-family:'Fraunces',serif; font-size:1.15rem; margin-bottom:6px; }
+  .grounding-steps { display:flex; flex-direction:column; gap:10px; margin-bottom:20px; }
+  .g-step { background:var(--surface2); border:1px solid var(--border); border-radius:14px; padding:12px 16px; display:flex; align-items:flex-start; gap:14px; transition:all 0.2s; opacity:0.4; }
+  .g-step.active { opacity:1; border-color:rgba(6,214,160,0.4); background:rgba(6,214,160,0.05); cursor:default; }
+  .g-step.done { opacity:0.6; border-color:rgba(6,214,160,0.25); cursor:pointer; }
+  .g-step.waiting { cursor:pointer; }
+  .g-step.waiting:hover { opacity:0.65; }
+  .g-num { width:32px; height:32px; border-radius:50%; background:var(--surface); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-family:'Fraunces',serif; font-weight:700; font-size:0.9rem; color:var(--text); flex-shrink:0; margin-top:2px; transition:all 0.3s; }
+  .g-step.done .g-num { background:var(--coach-bg); color:var(--coach); border-color:var(--coach); }
+  .g-label { font-weight:500; font-size:0.88rem; margin-bottom:2px; }
+  .g-desc { font-size:0.78rem; color:var(--muted); }
+  .g-input { width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(6,214,160,0.2); border-radius:8px; padding:8px 12px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:0.82rem; margin-top:8px; display:none; }
+  .g-step.active .g-input { display:block; }
+  .g-input:focus { outline:none; border-color:rgba(6,214,160,0.5); }
+  .g-input::placeholder { color:var(--muted); }
+  .done-btn { width:100%; background:linear-gradient(135deg,var(--coach),#04a880); border:none; border-radius:14px; padding:14px; color:white; font-family:'DM Sans',sans-serif; font-size:0.95rem; font-weight:500; cursor:pointer; transition:opacity 0.2s,transform 0.15s; }
+  .done-btn:hover { transform:scale(1.02); opacity:0.92; }
+  .typing { display:flex; align-items:center; gap:5px; padding:12px 16px; background:var(--surface2); border-radius:18px; width:fit-content; }
+  .typing span { width:7px; height:7px; border-radius:50%; background:var(--muted); animation:blink 1.2s infinite; }
+  .typing span:nth-child(2){animation-delay:0.2s} .typing span:nth-child(3){animation-delay:0.4s}
+  @keyframes blink { 0%,80%,100%{opacity:0.2;transform:scale(0.8)} 40%{opacity:1;transform:scale(1)} }
+  ::-webkit-scrollbar{width:5px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:3px}
 </style>
 </head>
 <body>
-
 <div class="app">
   <header>
     <div class="logo">Innerlijke<span>Stemmen</span></div>
-    <button class="panic-btn" onclick="openPanic()">
-      <span>🆘</span> Paniekaanval
-    </button>
+    <button class="panic-btn" onclick="openPanic()">🆘 Paniekaanval</button>
   </header>
 
-  <!-- INPUT -->
   <div class="input-zone">
     <label>Wat speelt er in je hoofd?</label>
     <div class="input-row">
@@ -536,20 +134,14 @@
     </div>
   </div>
 
-  <!-- CHARACTERS -->
   <div class="chars-panel">
     <h3>Jouw innerlijke personages</h3>
-    <div class="chars-grid" id="charsGrid">
-      <!-- injected by JS -->
-    </div>
+    <div class="chars-grid" id="charsGrid"></div>
   </div>
 
-  <!-- STAGE -->
   <div class="stage-label">📖 Het verhaal tot nu toe</div>
   <div class="dialogue" id="dialogue">
-    <div class="offline-nudge" id="emptyState">
-      Je hebt nog niets gedeeld. Wat houdt je bezig vandaag?
-    </div>
+    <div class="offline-nudge" id="emptyState">Je hebt nog niets gedeeld. Wat houdt je vandaag bezig?</div>
   </div>
 </div>
 
@@ -559,79 +151,84 @@
     <button class="panic-close" onclick="closePanic()">✕</button>
 
     <div id="panicBreath">
-      <div class="panic-title">🫁 Haal adem</div>
-      <p class="panic-sub">Je bent veilig. Volg het ritme mee. Adem in als de cirkel groeit, adem uit als die krimpt.</p>
+      <div class="panic-title">🫁 Adem met mij mee</div>
+      <p class="panic-sub">Je bent veilig. Je hoeft nu niets te doen behalve ademen. Volg het ritme rustig mee.</p>
       <div class="breath-ring-wrap">
         <div class="breath-ring" id="breathRing">Adem<br>in…</div>
       </div>
-      <p class="breath-text">4 tellen in — 4 tellen vasthouden — 6 tellen uit</p>
-      <button class="panic-next-btn" onclick="showGrounding()">Ik ben kalmer, ga verder →</button>
+      <p class="breath-phase-label" id="breathPhaseLabel">Adem rustig in door je neus</p>
+      <p class="breath-counter" id="breathCounter">4</p>
+      <button class="panic-next-btn" onclick="showGrounding()">Ik voel me wat rustiger →</button>
     </div>
 
-    <div id="panicGrounding" style="display:none;">
-      <div class="panic-title">🌍 5-4-3-2-1 Techniek</div>
-      <p class="panic-sub">Breng jezelf terug naar het moment. Klik elk stap aan en benoem wat je ervaart.</p>
+    <div id="panicGrounding" style="display:none">
+      <div class="grounding-title">🌍 5-4-3-2-1 Grounding techniek</div>
+      <p class="panic-sub">Dit brengt je terug naar het hier en nu. Klik elk stap aan en benoem wat je ervaart.</p>
       <div class="grounding-steps" id="groundingSteps">
-        <div class="g-step active" id="step5" onclick="activateStep(5)">
+        <div class="g-step active" id="step5">
           <div class="g-num">5</div>
-          <div class="g-info">
-            <div class="g-label">👁️ Dingen die je <em>ziet</em></div>
-            <div class="g-desc">Kijk om je heen — 5 dingen die je ziet</div>
-            <input class="g-input" placeholder="bijv. mijn lamp, mijn handen, het raam…" onkeydown="handleGroundingKey(event,5)">
+          <div style="flex:1">
+            <div class="g-label">👁️ 5 dingen die je <em>ziet</em></div>
+            <div class="g-desc">Kijk rustig om je heen</div>
+            <input class="g-input" placeholder="bijv. mijn lamp, mijn handen, het raam…" onkeydown="if(event.key==='Enter')activateStep(4)">
           </div>
         </div>
-        <div class="g-step" id="step4" onclick="activateStep(4)">
+        <div class="g-step waiting" id="step4" onclick="activateStep(4)">
           <div class="g-num">4</div>
-          <div class="g-info">
-            <div class="g-label">🤚 Dingen die je <em>voelt</em></div>
-            <div class="g-desc">4 dingen die je kunt aanraken</div>
-            <input class="g-input" placeholder="bijv. de stoel, mijn trui, de tafel…">
+          <div style="flex:1">
+            <div class="g-label">🤚 4 dingen die je <em>voelt</em></div>
+            <div class="g-desc">Raak iets aan — de stoel, je kleding</div>
+            <input class="g-input" placeholder="bijv. de stoel onder me, mijn trui…" onkeydown="if(event.key==='Enter')activateStep(3)">
           </div>
         </div>
-        <div class="g-step" id="step3" onclick="activateStep(3)">
+        <div class="g-step waiting" id="step3" onclick="activateStep(3)">
           <div class="g-num">3</div>
-          <div class="g-info">
-            <div class="g-label">👂 Dingen die je <em>hoort</em></div>
-            <div class="g-desc">3 geluiden om je heen</div>
-            <input class="g-input" placeholder="bijv. verkeer, mijn adem, een klok…">
+          <div style="flex:1">
+            <div class="g-label">👂 3 dingen die je <em>hoort</em></div>
+            <div class="g-desc">Luister aandachtig om je heen</div>
+            <input class="g-input" placeholder="bijv. verkeer, mijn adem, een vogel…" onkeydown="if(event.key==='Enter')activateStep(2)">
           </div>
         </div>
-        <div class="g-step" id="step2" onclick="activateStep(2)">
+        <div class="g-step waiting" id="step2" onclick="activateStep(2)">
           <div class="g-num">2</div>
-          <div class="g-info">
-            <div class="g-label">👃 Dingen die je <em>ruikt</em></div>
-            <div class="g-desc">2 geuren die je kunt opmerken</div>
-            <input class="g-input" placeholder="bijv. koffie, frisse lucht…">
+          <div style="flex:1">
+            <div class="g-label">👃 2 dingen die je <em>ruikt</em></div>
+            <div class="g-desc">Misschien lucht, koffie, of niets bijzonders</div>
+            <input class="g-input" placeholder="bijv. frisse lucht, mijn thee…" onkeydown="if(event.key==='Enter')activateStep(1)">
           </div>
         </div>
-        <div class="g-step" id="step1" onclick="activateStep(1)">
+        <div class="g-step waiting" id="step1" onclick="activateStep(1)">
           <div class="g-num">1</div>
-          <div class="g-info">
-            <div class="g-label">👅 Iets dat je <em>proeft</em></div>
-            <div class="g-desc">1 smaak in je mond</div>
-            <input class="g-input" placeholder="bijv. munt, koffie, niets…">
+          <div style="flex:1">
+            <div class="g-label">👅 1 ding dat je <em>proeft</em></div>
+            <div class="g-desc">Een smaak in je mond</div>
+            <input class="g-input" placeholder="bijv. koffie, muntje, niets…">
           </div>
         </div>
       </div>
-      <button class="panic-next-btn" style="background: linear-gradient(135deg, var(--coach), #04a880);" onclick="closePanic()">✅ Ik ben er weer. Sluit</button>
+      <button class="done-btn" onclick="closePanic()">✅ Ik ben er weer — sluit</button>
     </div>
   </div>
 </div>
 
 <script>
-// ── DATA ──
+// ── CHARACTERS ──
+// IMPORTANT DESIGN PRINCIPLE:
+// Negative characters RECOGNISE & COMPASSIONATELY LABEL the feeling pattern.
+// They do NOT amplify or validate the negative thought as true.
+// The Coach always follows to gently reframe.
 const characters = {
   catastrofe: {
     name: "De Catastrofedenker",
     emoji: "🌪️",
     color: "var(--catastrofe)",
     cls: "char-catastrofe",
-    desc: "Overdrijft alles wat mis kan gaan",
-    power: 70,
+    desc: "Herkent zorgen en angsten",
+    power: 60,
     responses: [
-      thought => `Dit is precies wat ik al zei! Als "${thought}" — dan gaat alles fout. We moeten ons voorbereiden op het ergste scenario. Stel je voor dat...`,
-      thought => `Oh nee. Dit wordt een ramp. Jij weet toch ook dat "${thought}" altijd erger wordt? Het houdt niet op. Nooit.`,
-      thought => `Zie je wel? "${thought}" is het begin van een reeks dingen die misgaan. Ik heb dit zien aankomen.`,
+      () => `Ik herken dit. Dit is de Catastrofedenker die aan het woord is — de stem die altijd het ergste scenario bedenkt. Hij probeert je eigenlijk te beschermen, ook al voelt het niet zo. Het is oké dat die stem er is.`,
+      () => `Dit gevoel van "het gaat fout" ken ik goed. Het is een patroon — de angstgedachte die groter lijkt dan hij is. Je hoeft er niet in mee te gaan. Je mag hem gewoon opmerken.`,
+      () => `Weet je wat ik zie? Iemand die iets écht belangrijk vindt. De Catastrofedenker wordt namelijk het luidst als je ergens echt om geeft. Dat is eigenlijk een teken van hoe serieus je dit neemt.`,
     ]
   },
   criticus: {
@@ -639,12 +236,12 @@ const characters = {
     emoji: "👁️",
     color: "var(--criticus)",
     cls: "char-criticus",
-    desc: "Altijd kritisch op jou",
-    power: 55,
+    desc: "Benoemt zelfkritiek met zachtheid",
+    power: 50,
     responses: [
-      thought => `Typisch jij om dat te denken. Als je beter je best had gedaan, hoefde je je nu geen zorgen te maken over "${thought}".`,
-      thought => `Anderen zouden dit gewoon aankunnen. Dat jij worstelt met "${thought}" zegt genoeg.`,
-      thought => `Je wist dit al lang. Had je maar eerder iets gedaan in plaats van uitstellen.`,
+      () => `Dit is de stem van de Innerlijke Criticus — de stem die zegt dat je tekortschiet. Maar let op: die stem is niet de waarheid. Het is een oud patroon dat jou ooit probeerde te beschermen door streng te zijn.`,
+      () => `Ik hoor hoe hard je voor jezelf bent. Zou je zo ook over een goede vriend praten? Waarschijnlijk niet. Jij verdient dezelfde vriendelijkheid die je anderen geeft.`,
+      () => `De criticus is actief. Hij denkt dat hij helpt door streng te zijn — maar streng zijn maakt het zelden beter. Wat zou er veranderen als je iets milder naar jezelf keek?`,
     ]
   },
   coach: {
@@ -653,11 +250,13 @@ const characters = {
     color: "var(--coach)",
     cls: "char-coach",
     desc: "Helpt relativeren en groeien",
-    power: 65,
+    power: 70,
     responses: [
-      thought => `Ik hoor je. Die gedachte voelt heel zwaar nu. Maar laten we eens kijken — wat is het ergste dat echt zou kunnen gebeuren, en hoe groot is de kans daarop?`,
-      thought => `Het is logisch dat je dit voelt. Elke grote uitdaging brengt twijfel mee. Wat heb je in het verleden al overwonnen wat net zo moeilijk leek?`,
-      thought => `Deze gedachte is maar één stem. Wat zou een goede vriend tegen je zeggen over "${thought}"?`,
+      () => `Die gedachte mag er zijn — en tegelijk: is die 100% zeker waar? Gedachten zijn geen feiten. Ze voelen als feiten, maar het zijn verhalen die je brein vertelt. Wat is er wél zeker op dit moment?`,
+      () => `Adem even. Je hoeft dit nu niet op te lossen. Wat is één kleine, concrete stap die je vandaag kunt zetten — hoe klein ook? Zelfs één stap is genoeg.`,
+      () => `Je bent sterker dan deze gedachte doet denken. Denk eens terug: wanneer heb je iets overwonnen wat ook heel zwaar voelde? Je hebt dat gedaan. Je kunt dit ook.`,
+      () => `Laten we dit even van een afstand bekijken. Over een jaar — hoe groot is de kans dat dit moment dan nog even zwaar voelt? Waarschijnlijk kleiner dan het nu lijkt.`,
+      () => `Het is helemaal normaal om dit te voelen. Iedereen worstelt soms. Dat je dit bespreekt betekent dat je al bezig bent — en dat is meer dan genoeg.`,
     ]
   },
   dromer: {
@@ -665,259 +264,209 @@ const characters = {
     emoji: "✨",
     color: "var(--dromer)",
     cls: "char-dromer",
-    desc: "Ziet altijd mogelijkheden",
+    desc: "Ziet mogelijkheden en hoop",
     power: 45,
     responses: [
-      thought => `Stel je eens voor dat het anders loopt. Wat als dit juist het begin is van iets bijzonders?`,
-      thought => `Elke moeilijkheid is een verhaal dat nog geschreven wordt. Jij bent de hoofdpersoon — en die geeft niet op.`,
-      thought => `Misschien is dit niet het einde van een hoofdstuk, maar het begin van een nieuw avontuur.`,
+      () => `Stel je eens voor dat dit het begin is van iets nieuws. Wat als deze moeilijkheid je iets leert wat je anders nooit had ontdekt?`,
+      () => `Elk verhaal heeft moeilijke scènes. Maar jij bent de hoofdpersoon — en die geeft niet op bij het eerste struikelblok.`,
+      () => `Wat als je over zes maanden terugkijkt op dit moment en denkt: "dát was het keerpunt waarop ik koos om door te gaan"?`,
     ]
   }
 };
 
 const plotTwists = [
-  "Plot twist: dit gevoel is een bewijs dat je het serieus neemt — niet dat je gaat falen.",
-  "Wacht. Stel dat dit gevoel je juist beschermt? Angst zegt soms: 'ik wil dit écht goed doen.'",
-  "In elk verhaal komt er een moment waarop de held twijfelt. Dit is jouw scène.",
-  "Plot twist: de criticus en de coach zijn allebei jij. Welke stem geef jij vandaag het woord?",
-  "Wat als 'ik ga falen' eigenlijk betekent: 'ik wil zo graag slagen'?",
+  "Wist je dat angst voor falen vaak betekent dat je het echt goed wil doen? Dat is een kracht, geen zwakte.",
+  "De stem die zegt 'je gaat falen' en de stem die zegt 'je kunt het' — beide zijn jij. Welke geef jij vandaag het podium?",
+  "In elk goed verhaal twijfelt de held. Dit is jouw twijfelscène — geen eindscène.",
+  "Gedachten zijn geen feiten. Ze voelen als feiten, maar het zijn verhalen die je brein vertelt.",
+  "Wat je nu voelt is tijdelijk. Wat je nu doet met dit gevoel — dát telt.",
+  "De Catastrofedenker en de Coach zijn allebei onderdelen van jou. Ze werken samen — de een signaleert, de ander kalmeer.",
 ];
 
 let messageCount = 0;
-let characterPowers = { catastrofe: 70, criticus: 55, coach: 65, dromer: 45 };
+let characterPowers = { catastrofe: 60, criticus: 50, coach: 70, dromer: 45 };
 
-// ── RENDER CHARS ──
 function renderChars() {
   const grid = document.getElementById('charsGrid');
   grid.innerHTML = '';
   Object.entries(characters).forEach(([key, c]) => {
     const p = characterPowers[key];
-    const card = document.createElement('div');
-    card.className = 'char-card';
-    card.innerHTML = `
-      <div class="char-top">
-        <span class="char-emoji">${c.emoji}</span>
-        <span class="char-card-name" style="color:${c.color}">${c.name.replace('De ', '')}</span>
-      </div>
-      <div class="char-desc">${c.desc}</div>
-      <div class="char-power">
-        <div class="char-power-bar" style="width:${p}%; background:${c.color};"></div>
-      </div>
-    `;
-    grid.appendChild(card);
+    const div = document.createElement('div');
+    div.className = 'char-card';
+    div.innerHTML = `<div class="char-top"><span class="char-emoji">${c.emoji}</span><span class="char-card-name" style="color:${c.color}">${c.name.replace('De ','')}</span></div><div class="char-desc">${c.desc}</div><div class="char-power"><div class="char-power-bar" style="width:${p}%;background:${c.color}"></div></div>`;
+    grid.appendChild(div);
   });
 }
 
-// ── PROCESS THOUGHT ──
+function detectCharacter(t) {
+  const s = t.toLowerCase();
+  if (/stom|slecht|niet goed|zwak|lui|dom|waardeloos|schuld|mijn fout/.test(s)) return 'criticus';
+  if (/misschien|zou kunnen|dromen|hoop|stel je voor|wat als het/.test(s)) return 'dromer';
+  return 'catastrofe';
+}
+
 async function processThought() {
   const input = document.getElementById('thoughtInput');
   const thought = input.value.trim();
   if (!thought) return;
-
-  // Remove empty state
   document.getElementById('emptyState')?.remove();
-
-  // Add user message
   addMessage('user', null, thought);
   input.value = '';
   messageCount++;
 
-  // Pick primary character
-  const detected = detectCharacter(thought);
+  const charKey = detectCharacter(thought);
+  const char = characters[charKey];
+
+  // Step 1: character labels the feeling
   await delay(500);
-  showTyping(detected.cls);
+  showTyping(char.cls);
   await delay(1200);
   removeTyping();
+  addMessage('char', char, char.responses[Math.floor(Math.random() * char.responses.length)](), true);
 
-  const resp = detected.responses[Math.floor(Math.random() * detected.responses.length)](thought);
-  addMessage('char', detected, resp, true);
+  // Step 2: Coach always follows to reframe
+  await delay(800);
+  showTyping('char-coach');
+  await delay(1300);
+  removeTyping();
+  addMessage('char', characters.coach, characters.coach.responses[Math.floor(Math.random() * characters.coach.responses.length)](), true);
 
-  // Adjust powers
-  if (['catastrofe','criticus'].includes(getKey(detected))) {
-    characterPowers[getKey(detected)] = Math.max(10, characterPowers[getKey(detected)] - 4);
-    characterPowers.coach = Math.min(95, characterPowers.coach + 3);
+  // Slowly reduce negative character dominance
+  if (['catastrofe','criticus'].includes(charKey)) {
+    characterPowers[charKey] = Math.max(15, characterPowers[charKey] - 3);
+    characterPowers.coach = Math.min(95, characterPowers.coach + 2);
   }
   renderChars();
 
-  // Plot twist occasionally
-  if (messageCount % 3 === 0) {
-    await delay(600);
-    addPlotTwist();
-  }
-
-  // Show counter options
+  if (messageCount % 3 === 0) { await delay(500); addPlotTwist(); }
   await delay(300);
-  addCounterOptions(thought);
-
-  // Offline nudge occasionally
-  if (messageCount % 5 === 0) {
-    addOfflineNudge();
-  }
+  addCounterOptions();
+  if (messageCount % 5 === 0) { await delay(400); addOfflineNudge(); }
 }
 
-function getKey(char) {
-  return Object.entries(characters).find(([k,v]) => v === char)?.[0];
-}
-
-function detectCharacter(thought) {
-  const t = thought.toLowerCase();
-  if (/fal|mis|nooit|ramp|altijd fout|verschrikkelijk|alles|kapot/.test(t)) return characters.catastrofe;
-  if (/stom|slecht|niet goed|zwak|lui|domme|waardeloos/.test(t)) return characters.criticus;
-  if (/misschien|zou kunnen|stel je voor|wat als|dromen|hoop/.test(t)) return characters.dromer;
-  // default to catastrofe for "ik ga..." type thoughts
-  if (/ik ga|ik ben bang|ik weet niet|angstig|stress|zorgen/.test(t)) return characters.catastrofe;
-  const keys = Object.keys(characters);
-  return characters[keys[Math.floor(Math.random() * 2)]]; // mostly negative for realism
-}
-
-function addMessage(type, char, text, animate = false) {
-  const dialogue = document.getElementById('dialogue');
+function addMessage(type, char, text, animate) {
+  const d = document.getElementById('dialogue');
   const div = document.createElement('div');
   div.className = 'message ' + (type === 'user' ? 'user' : (char?.cls || ''));
-  if (type === 'user') {
-    div.innerHTML = `
-      <div class="avatar" style="background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.1);">🧠</div>
-      <div class="bubble">${escHtml(text)}</div>
-    `;
-  } else {
-    div.innerHTML = `
-      <div class="avatar">${char.emoji}</div>
-      <div class="bubble">
-        <div class="character-name">${char.name}</div>
-        <div class="bubble-text">${escHtml(text)}</div>
-      </div>
-    `;
-  }
   if (animate) div.style.animationDelay = '0.05s';
-  dialogue.appendChild(div);
+  if (type === 'user') {
+    div.innerHTML = `<div class="avatar" style="background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.1)">🧠</div><div class="bubble">${esc(text)}</div>`;
+  } else {
+    div.innerHTML = `<div class="avatar">${char.emoji}</div><div class="bubble"><div class="character-name">${char.name}</div><div>${esc(text)}</div></div>`;
+  }
+  d.appendChild(div);
   div.scrollIntoView({ behavior: 'smooth', block: 'end' });
 }
 
-function addCounterOptions(thought) {
-  const dialogue = document.getElementById('dialogue');
+function addCounterOptions() {
+  const d = document.getElementById('dialogue');
   const wrap = document.createElement('div');
   wrap.className = 'response-actions';
-  wrap.style.paddingLeft = '58px';
-  wrap.innerHTML = `
-    <span style="font-size:0.75rem;color:var(--muted);align-self:center;">Laat reageren:</span>
-    <button class="counter-btn" onclick="addCoachResponse('${escAttr(thought)}', this.parentElement)">🌿 Coach</button>
-    <button class="counter-btn" onclick="addDreamerResponse('${escAttr(thought)}', this.parentElement)">✨ Dromer</button>
-  `;
-  dialogue.appendChild(wrap);
+  wrap.innerHTML = `<span style="font-size:0.75rem;color:var(--muted);align-self:center">Nog een stem:</span><button class="counter-btn" onclick="addExtraResponse('dromer',this.parentElement)">✨ Dromer</button><button class="counter-btn" onclick="addExtraResponse('criticus',this.parentElement)">👁️ Criticus</button>`;
+  d.appendChild(wrap);
 }
 
-async function addCoachResponse(thought, wrap) {
+async function addExtraResponse(key, wrap) {
   wrap.remove();
-  showTyping('char-coach');
+  const char = characters[key];
+  showTyping(char.cls);
   await delay(1000);
   removeTyping();
-  const resp = characters.coach.responses[Math.floor(Math.random() * characters.coach.responses.length)](thought);
-  addMessage('char', characters.coach, resp, true);
-  characterPowers.coach = Math.min(95, characterPowers.coach + 5);
-  renderChars();
-}
-
-async function addDreamerResponse(thought, wrap) {
-  wrap.remove();
-  showTyping('char-dromer');
-  await delay(1000);
-  removeTyping();
-  const resp = characters.dromer.responses[Math.floor(Math.random() * characters.dromer.responses.length)](thought);
-  addMessage('char', characters.dromer, resp, true);
-  characterPowers.dromer = Math.min(95, characterPowers.dromer + 3);
-  renderChars();
+  addMessage('char', char, char.responses[Math.floor(Math.random() * char.responses.length)](), true);
 }
 
 function addPlotTwist() {
-  const dialogue = document.getElementById('dialogue');
-  const twist = document.createElement('div');
-  twist.className = 'plot-twist';
-  const txt = plotTwists[Math.floor(Math.random() * plotTwists.length)];
-  twist.innerHTML = `<span class="twist-icon">🎬</span><span><strong>Plot twist:</strong> ${escHtml(txt.replace('Plot twist: ',''))}</span>`;
-  dialogue.appendChild(twist);
+  const d = document.getElementById('dialogue');
+  const div = document.createElement('div');
+  div.className = 'plot-twist';
+  div.innerHTML = `<span style="font-size:1.2rem;flex-shrink:0">🎬</span><span><strong>Moment van inzicht:</strong> ${esc(plotTwists[Math.floor(Math.random()*plotTwists.length)])}</span>`;
+  d.appendChild(div);
 }
 
 function addOfflineNudge() {
-  const dialogue = document.getElementById('dialogue');
-  const nudge = document.createElement('div');
-  nudge.className = 'offline-nudge';
-  nudge.textContent = '💤 Even pauzeren is ook oké. Niet alles hoeft woorden te krijgen. Ga iets doen met je handen.';
-  dialogue.appendChild(nudge);
+  const d = document.getElementById('dialogue');
+  const div = document.createElement('div');
+  div.className = 'offline-nudge';
+  div.textContent = '💤 Even pauzeren is ook oké. Ga iets doen met je handen — even weg van de woorden.';
+  d.appendChild(div);
 }
 
 function showTyping(cls) {
-  const dialogue = document.getElementById('dialogue');
+  const d = document.getElementById('dialogue');
   const t = document.createElement('div');
   t.id = 'typingIndicator';
   t.className = 'message ' + cls;
   t.innerHTML = `<div class="typing"><span></span><span></span><span></span></div>`;
-  dialogue.appendChild(t);
+  d.appendChild(t);
   t.scrollIntoView({ behavior: 'smooth', block: 'end' });
 }
-
-function removeTyping() {
-  document.getElementById('typingIndicator')?.remove();
-}
-
+function removeTyping() { document.getElementById('typingIndicator')?.remove(); }
 function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
-function escHtml(t) { return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function escAttr(t) { return t.replace(/'/g, "\\'").replace(/"/g,'&quot;'); }
+function esc(t) { return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-// Enter to send
 document.getElementById('thoughtInput').addEventListener('keydown', e => {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); processThought(); }
 });
 
-// ── PANIC ──
+// ── PANIC / BREATHING ──
+let breathTimer;
+const breathPhases = [
+  { label: 'Adem rustig in door je neus', ring: 'Adem\nin…', duration: 4, scale: 1.4 },
+  { label: 'Houd even vast…', ring: 'Houd\nvast…', duration: 4, scale: 1.4 },
+  { label: 'Adem langzaam uit door je mond', ring: 'Adem\nuit…', duration: 6, scale: 1.0 },
+];
+let breathPhaseIdx = 0, breathCount = 4;
+
 function openPanic() {
   document.getElementById('panicOverlay').classList.add('open');
   document.getElementById('panicBreath').style.display = 'block';
   document.getElementById('panicGrounding').style.display = 'none';
-  startBreathCycle();
+  breathPhaseIdx = 0;
+  runBreathPhase();
 }
 function closePanic() {
   document.getElementById('panicOverlay').classList.remove('open');
-  stopBreathCycle();
+  clearInterval(breathTimer);
 }
-
-let breathInterval;
-let breathPhase = 0;
-const breathTexts = ['Adem\nin…', 'Houd\nvast…', 'Adem\nuit…'];
-function startBreathCycle() {
+function runBreathPhase() {
+  clearInterval(breathTimer);
+  const ph = breathPhases[breathPhaseIdx];
   const ring = document.getElementById('breathRing');
-  breathPhase = 0;
-  ring.textContent = breathTexts[0];
-  breathInterval = setInterval(() => {
-    breathPhase = (breathPhase + 1) % 3;
-    ring.innerHTML = breathTexts[breathPhase].replace('\n', '<br>');
-  }, 4000);
+  document.getElementById('breathPhaseLabel').textContent = ph.label;
+  ring.innerHTML = ph.ring.replace('\n','<br>');
+  ring.style.transform = `scale(${ph.scale})`;
+  breathCount = ph.duration;
+  document.getElementById('breathCounter').textContent = breathCount;
+  breathTimer = setInterval(() => {
+    breathCount--;
+    document.getElementById('breathCounter').textContent = breathCount;
+    if (breathCount <= 0) {
+      clearInterval(breathTimer);
+      breathPhaseIdx = (breathPhaseIdx + 1) % breathPhases.length;
+      setTimeout(runBreathPhase, 400);
+    }
+  }, 1000);
 }
-function stopBreathCycle() { clearInterval(breathInterval); }
-
 function showGrounding() {
+  clearInterval(breathTimer);
   document.getElementById('panicBreath').style.display = 'none';
   document.getElementById('panicGrounding').style.display = 'block';
-  stopBreathCycle();
 }
-
 function activateStep(n) {
   [5,4,3,2,1].forEach(i => {
     const el = document.getElementById('step'+i);
-    if (i === n) { el.classList.add('active'); el.classList.remove('done'); }
-    else if (i > n) { el.classList.add('done'); el.classList.remove('active'); }
-    else { el.classList.remove('active','done'); }
+    if (!el) return;
+    el.classList.remove('active','done','waiting');
+    if (i === n) el.classList.add('active');
+    else if (i > n) el.classList.add('done');
+    else el.classList.add('waiting');
   });
+  setTimeout(() => document.getElementById('step'+n)?.querySelector('.g-input')?.focus(), 60);
 }
-
-function handleGroundingKey(e, n) {
-  if (e.key === 'Enter' && n > 1) activateStep(n - 1);
-}
-
 document.getElementById('panicOverlay').addEventListener('click', e => {
   if (e.target === document.getElementById('panicOverlay')) closePanic();
 });
 
-// ── INIT ──
 renderChars();
 </script>
 </body>
