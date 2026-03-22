@@ -6,122 +6,195 @@
 <title>Innerlijke Stemmen</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,500;0,700;1,300;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0f0e17;
-    --surface: #1a1827;
-    --surface2: #231f35;
-    --border: rgba(255,255,255,0.07);
-    --text: #fffffe;
-    --muted: rgba(255,255,255,0.45);
-    --accent: #ff8906;
-    --catastrofe: #ff8c69;
-    --catastrofe-bg: rgba(255,140,105,0.10);
-    --criticus: #b39ddb;
-    --criticus-bg: rgba(179,157,219,0.10);
-    --coach: #06d6a0;
-    --coach-bg: rgba(6,214,160,0.12);
-    --dromer: #ffd166;
-    --dromer-bg: rgba(255,209,102,0.12);
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; overflow-x: hidden; }
-  body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E"); pointer-events:none; z-index:9999; opacity:0.4; }
-  .app { max-width: 760px; margin: 0 auto; padding: 0 20px 80px; }
-  header { padding: 36px 0 24px; display: flex; align-items: center; justify-content: space-between; }
-  .logo { font-family:'Fraunces',serif; font-size:1.5rem; font-weight:700; letter-spacing:-0.02em; background:linear-gradient(135deg,var(--text),rgba(255,255,255,0.5)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-  .logo span { -webkit-text-fill-color:var(--accent); }
-  .panic-btn { background:linear-gradient(135deg,#ff4d6d,#c9184a); border:none; border-radius:50px; padding:10px 20px; color:white; font-family:'DM Sans',sans-serif; font-size:0.85rem; font-weight:500; cursor:pointer; display:flex; align-items:center; gap:7px; box-shadow:0 4px 20px rgba(255,77,109,0.35); animation:pulse-panic 2.5s ease-in-out infinite; transition:transform 0.15s; }
-  .panic-btn:hover { transform:scale(1.05); }
-  @keyframes pulse-panic { 0%,100%{box-shadow:0 4px 20px rgba(255,77,109,0.35)} 50%{box-shadow:0 4px 28px rgba(255,77,109,0.6)} }
-  .input-zone { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:24px; margin-bottom:28px; }
-  .input-zone label { display:block; font-family:'Fraunces',serif; font-style:italic; font-size:1.05rem; color:var(--muted); margin-bottom:14px; }
-  .input-row { display:flex; gap:12px; align-items:flex-end; }
-  textarea { flex:1; background:var(--surface2); border:1px solid var(--border); border-radius:14px; padding:14px 16px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:0.95rem; resize:none; height:80px; line-height:1.5; transition:border-color 0.2s; }
-  textarea::placeholder { color:var(--muted); }
-  textarea:focus { outline:none; border-color:rgba(255,255,255,0.2); }
-  .send-btn { background:var(--accent); border:none; border-radius:14px; width:52px; height:52px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:transform 0.15s; flex-shrink:0; }
-  .send-btn:hover { transform:scale(1.06); }
-  .send-btn svg { width:20px; height:20px; fill:white; }
-  .stage-label { font-family:'Fraunces',serif; font-size:0.8rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted); margin-bottom:16px; }
-  .dialogue { display:flex; flex-direction:column; gap:16px; margin-bottom:28px; }
-  .message { display:flex; gap:14px; animation:fadeSlide 0.35s ease forwards; opacity:0; }
-  .message.user { flex-direction:row-reverse; }
-  @keyframes fadeSlide { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
-  .avatar { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.3rem; flex-shrink:0; border:2px solid transparent; }
-  .bubble { max-width:78%; padding:14px 18px; border-radius:18px; font-size:0.92rem; line-height:1.7; }
-  .message.user .bubble { background:var(--surface2); border:1px solid var(--border); border-radius:18px 4px 18px 18px; }
-  .character-name { font-size:0.72rem; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px; opacity:0.8; }
-  .char-catastrofe .avatar { background:var(--catastrofe-bg); border-color:var(--catastrofe); }
-  .char-catastrofe .bubble { background:var(--catastrofe-bg); border:1px solid rgba(255,140,105,0.2); border-radius:4px 18px 18px 18px; }
-  .char-catastrofe .character-name { color:var(--catastrofe); }
-  .char-criticus .avatar { background:var(--criticus-bg); border-color:var(--criticus); }
-  .char-criticus .bubble { background:var(--criticus-bg); border:1px solid rgba(179,157,219,0.2); border-radius:4px 18px 18px 18px; }
-  .char-criticus .character-name { color:var(--criticus); }
-  .char-coach .avatar { background:var(--coach-bg); border-color:var(--coach); }
-  .char-coach .bubble { background:var(--coach-bg); border:1px solid rgba(6,214,160,0.25); border-radius:4px 18px 18px 18px; }
-  .char-coach .character-name { color:var(--coach); }
-  .char-dromer .avatar { background:var(--dromer-bg); border-color:var(--dromer); }
-  .char-dromer .bubble { background:var(--dromer-bg); border:1px solid rgba(255,209,102,0.25); border-radius:4px 18px 18px 18px; }
-  .char-dromer .character-name { color:var(--dromer); }
-  .response-actions { margin-top:4px; display:flex; gap:8px; flex-wrap:wrap; padding-left:58px; }
-  .counter-btn { border:1px solid var(--border); background:transparent; border-radius:50px; padding:7px 14px; font-family:'DM Sans',sans-serif; font-size:0.78rem; color:var(--muted); cursor:pointer; transition:all 0.2s; }
-  .counter-btn:hover { border-color:var(--coach); color:var(--coach); background:var(--coach-bg); }
-  .chars-panel { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:20px 24px; margin-bottom:24px; }
-  .chars-panel h3 { font-family:'Fraunces',serif; font-size:0.9rem; color:var(--muted); margin-bottom:16px; }
-  .chars-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px; }
-  .char-card { background:var(--surface2); border:1px solid var(--border); border-radius:14px; padding:12px; transition:transform 0.2s; }
-  .char-card:hover { transform:translateY(-2px); }
-  .char-top { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
-  .char-emoji { font-size:1.4rem; }
-  .char-card-name { font-size:0.8rem; font-weight:500; }
-  .char-desc { font-size:0.72rem; color:var(--muted); line-height:1.4; }
-  .char-power { margin-top:8px; height:3px; border-radius:2px; background:rgba(255,255,255,0.08); overflow:hidden; }
-  .char-power-bar { height:100%; border-radius:2px; transition:width 0.8s ease; }
-  .plot-twist { background:linear-gradient(135deg,rgba(255,137,6,0.12),rgba(255,209,102,0.08)); border:1px solid rgba(255,137,6,0.25); border-radius:14px; padding:14px 18px; font-size:0.85rem; color:var(--dromer); display:flex; gap:10px; align-items:flex-start; animation:fadeSlide 0.4s ease forwards; opacity:0; }
-  .offline-nudge { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px 18px; font-size:0.82rem; color:var(--muted); text-align:center; font-style:italic; }
-  .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.88); backdrop-filter:blur(10px); z-index:1000; display:none; align-items:center; justify-content:center; padding:20px; }
-  .modal-overlay.open { display:flex; }
-  .panic-modal { background:var(--surface); border:1px solid rgba(255,77,109,0.2); border-radius:28px; padding:36px; max-width:520px; width:100%; position:relative; animation:modalIn 0.3s cubic-bezier(0.34,1.56,0.64,1) forwards; max-height:90vh; overflow-y:auto; }
-  @keyframes modalIn { from{opacity:0;transform:scale(0.88)} to{opacity:1;transform:scale(1)} }
-  .panic-close { position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.06); border:none; border-radius:50%; width:36px; height:36px; color:var(--muted); font-size:1.1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
-  .panic-close:hover { background:rgba(255,255,255,0.12); color:var(--text); }
-  .panic-title { font-family:'Fraunces',serif; font-size:1.6rem; font-weight:700; margin-bottom:8px; }
-  .panic-sub { color:var(--muted); font-size:0.88rem; margin-bottom:24px; line-height:1.6; }
-  .breath-ring-wrap { display:flex; justify-content:center; margin:16px 0; }
-  .breath-ring { width:120px; height:120px; border-radius:50%; background:radial-gradient(circle,rgba(255,77,109,0.2),rgba(255,77,109,0.02)); border:2px solid rgba(255,77,109,0.35); display:flex; align-items:center; justify-content:center; font-size:0.82rem; color:var(--text); text-align:center; line-height:1.5; transition:transform 0.5s ease; }
-  .breath-phase-label { text-align:center; font-size:0.8rem; color:var(--muted); margin-bottom:4px; min-height:20px; }
-  .breath-counter { text-align:center; font-family:'Fraunces',serif; font-size:2.4rem; color:var(--text); margin-bottom:24px; }
-  .panic-next-btn { width:100%; background:linear-gradient(135deg,#ff8c69,#e05a3a); border:none; border-radius:14px; padding:14px; color:white; font-family:'DM Sans',sans-serif; font-size:0.95rem; font-weight:500; cursor:pointer; transition:opacity 0.2s,transform 0.15s; }
-  .panic-next-btn:hover { transform:scale(1.02); opacity:0.92; }
-  .grounding-title { font-family:'Fraunces',serif; font-size:1.15rem; margin-bottom:6px; }
-  .grounding-steps { display:flex; flex-direction:column; gap:10px; margin-bottom:20px; }
-  .g-step { background:var(--surface2); border:1px solid var(--border); border-radius:14px; padding:12px 16px; display:flex; align-items:flex-start; gap:14px; transition:all 0.2s; opacity:0.4; }
-  .g-step.active { opacity:1; border-color:rgba(6,214,160,0.4); background:rgba(6,214,160,0.05); cursor:default; }
-  .g-step.done { opacity:0.6; border-color:rgba(6,214,160,0.25); cursor:pointer; }
-  .g-step.waiting { cursor:pointer; }
-  .g-step.waiting:hover { opacity:0.65; }
-  .g-num { width:32px; height:32px; border-radius:50%; background:var(--surface); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-family:'Fraunces',serif; font-weight:700; font-size:0.9rem; color:var(--text); flex-shrink:0; margin-top:2px; transition:all 0.3s; }
-  .g-step.done .g-num { background:var(--coach-bg); color:var(--coach); border-color:var(--coach); }
-  .g-label { font-weight:500; font-size:0.88rem; margin-bottom:2px; }
-  .g-desc { font-size:0.78rem; color:var(--muted); }
-  .g-input { width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(6,214,160,0.2); border-radius:8px; padding:8px 12px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:0.82rem; margin-top:8px; display:none; }
-  .g-step.active .g-input { display:block; }
-  .g-input:focus { outline:none; border-color:rgba(6,214,160,0.5); }
-  .g-input::placeholder { color:var(--muted); }
-  .done-btn { width:100%; background:linear-gradient(135deg,var(--coach),#04a880); border:none; border-radius:14px; padding:14px; color:white; font-family:'DM Sans',sans-serif; font-size:0.95rem; font-weight:500; cursor:pointer; transition:opacity 0.2s,transform 0.15s; }
-  .done-btn:hover { transform:scale(1.02); opacity:0.92; }
-  .typing { display:flex; align-items:center; gap:5px; padding:12px 16px; background:var(--surface2); border-radius:18px; width:fit-content; }
-  .typing span { width:7px; height:7px; border-radius:50%; background:var(--muted); animation:blink 1.2s infinite; }
-  .typing span:nth-child(2){animation-delay:0.2s} .typing span:nth-child(3){animation-delay:0.4s}
-  @keyframes blink { 0%,80%,100%{opacity:0.2;transform:scale(0.8)} 40%{opacity:1;transform:scale(1)} }
-  ::-webkit-scrollbar{width:5px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:3px}
+:root {
+  --bg:#0f0e17; --surface:#1a1827; --surface2:#231f35;
+  --border:rgba(255,255,255,0.07); --text:#fffffe; --muted:rgba(255,255,255,0.45);
+  --accent:#ff8906;
+  --catastrofe:#ff8c69; --catastrofe-bg:rgba(255,140,105,0.10);
+  --criticus:#b39ddb;   --criticus-bg:rgba(179,157,219,0.10);
+  --coach:#06d6a0;      --coach-bg:rgba(6,214,160,0.12);
+  --dromer:#ffd166;     --dromer-bg:rgba(255,209,102,0.12);
+  --calm:#7eb8f7;       --calm-bg:rgba(126,184,247,0.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.4}
+.app{max-width:780px;margin:0 auto;padding:0 20px 100px}
+
+/* HEADER */
+header{padding:32px 0 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.logo{font-family:'Fraunces',serif;font-size:1.4rem;font-weight:700;letter-spacing:-0.02em;background:linear-gradient(135deg,var(--text),rgba(255,255,255,0.5));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.logo span{-webkit-text-fill-color:var(--accent)}
+.header-btns{display:flex;gap:8px;flex-wrap:wrap}
+.hbtn{border:none;border-radius:50px;padding:9px 16px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px;transition:transform 0.15s,opacity 0.15s;white-space:nowrap}
+.hbtn:hover{transform:scale(1.04);opacity:0.9}
+.btn-panic{background:linear-gradient(135deg,#ff4d6d,#c9184a);color:white;box-shadow:0 4px 18px rgba(255,77,109,0.3);animation:pulse-panic 2.5s ease-in-out infinite}
+.btn-calm{background:linear-gradient(135deg,#7eb8f7,#4a90d9);color:white;box-shadow:0 4px 18px rgba(126,184,247,0.25)}
+.btn-summary{background:var(--surface);border:1px solid var(--border);color:var(--muted)}
+@keyframes pulse-panic{0%,100%{box-shadow:0 4px 18px rgba(255,77,109,0.3)}50%{box-shadow:0 4px 26px rgba(255,77,109,0.55)}}
+
+/* INPUT */
+.input-zone{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:22px;margin-bottom:24px}
+.input-zone label{display:block;font-family:'Fraunces',serif;font-style:italic;font-size:1rem;color:var(--muted);margin-bottom:12px}
+.input-row{display:flex;gap:10px;align-items:flex-end}
+textarea{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:13px 15px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.93rem;resize:none;height:76px;line-height:1.5;transition:border-color 0.2s}
+textarea::placeholder{color:var(--muted)}
+textarea:focus{outline:none;border-color:rgba(255,255,255,0.2)}
+.send-btn{background:var(--accent);border:none;border-radius:14px;width:50px;height:50px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform 0.15s;flex-shrink:0}
+.send-btn:hover{transform:scale(1.06)}
+.send-btn svg{width:19px;height:19px;fill:white}
+
+/* DIALOGUE MODE TOGGLE */
+.mode-toggle{display:flex;gap:0;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:3px;margin-bottom:20px;width:fit-content}
+.mode-btn{border:none;background:transparent;border-radius:9px;padding:7px 16px;font-family:'DM Sans',sans-serif;font-size:0.8rem;color:var(--muted);cursor:pointer;transition:all 0.2s}
+.mode-btn.active{background:var(--surface);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,0.3)}
+
+/* CHARS PANEL */
+.chars-panel{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:18px 22px;margin-bottom:22px}
+.chars-panel h3{font-family:'Fraunces',serif;font-size:0.85rem;color:var(--muted);margin-bottom:14px}
+.chars-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:9px}
+.char-card{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:11px;transition:transform 0.2s}
+.char-card:hover{transform:translateY(-2px)}
+.char-top{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.char-emoji{font-size:1.3rem}
+.char-card-name{font-size:0.78rem;font-weight:500}
+.char-desc{font-size:0.7rem;color:var(--muted);line-height:1.4}
+.char-power{margin-top:7px;height:3px;border-radius:2px;background:rgba(255,255,255,0.08);overflow:hidden}
+.char-power-bar{height:100%;border-radius:2px;transition:width 0.9s ease}
+
+/* DIALOGUE */
+.stage-label{font-family:'Fraunces',serif;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);margin-bottom:14px}
+.dialogue{display:flex;flex-direction:column;gap:14px;margin-bottom:24px}
+.message{display:flex;gap:13px;animation:fadeSlide 0.35s ease forwards;opacity:0}
+.message.user{flex-direction:row-reverse}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.avatar{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0;border:2px solid transparent}
+.bubble{max-width:78%;padding:13px 17px;border-radius:18px;font-size:0.91rem;line-height:1.7}
+.message.user .bubble{background:var(--surface2);border:1px solid var(--border);border-radius:18px 4px 18px 18px}
+.character-name{font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:5px;opacity:0.8}
+.char-catastrofe .avatar{background:var(--catastrofe-bg);border-color:var(--catastrofe)}
+.char-catastrofe .bubble{background:var(--catastrofe-bg);border:1px solid rgba(255,140,105,0.2);border-radius:4px 18px 18px 18px}
+.char-catastrofe .character-name{color:var(--catastrofe)}
+.char-criticus .avatar{background:var(--criticus-bg);border-color:var(--criticus)}
+.char-criticus .bubble{background:var(--criticus-bg);border:1px solid rgba(179,157,219,0.2);border-radius:4px 18px 18px 18px}
+.char-criticus .character-name{color:var(--criticus)}
+.char-coach .avatar{background:var(--coach-bg);border-color:var(--coach)}
+.char-coach .bubble{background:var(--coach-bg);border:1px solid rgba(6,214,160,0.25);border-radius:4px 18px 18px 18px}
+.char-coach .character-name{color:var(--coach)}
+.char-dromer .avatar{background:var(--dromer-bg);border-color:var(--dromer)}
+.char-dromer .bubble{background:var(--dromer-bg);border:1px solid rgba(255,209,102,0.25);border-radius:4px 18px 18px 18px}
+.char-dromer .character-name{color:var(--dromer)}
+
+/* DIALOGUE MODE: side by side debate */
+.debate-stage{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:18px;margin-bottom:14px;animation:fadeSlide 0.4s ease forwards;opacity:0}
+.debate-header{font-family:'Fraunces',serif;font-size:0.82rem;color:var(--muted);margin-bottom:14px;text-align:center}
+.debate-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.debate-side{border-radius:14px;padding:13px;font-size:0.85rem;line-height:1.6}
+.debate-side-name{font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.debate-neg{background:var(--catastrofe-bg);border:1px solid rgba(255,140,105,0.18)}
+.debate-neg .debate-side-name{color:var(--catastrofe)}
+.debate-pos{background:var(--coach-bg);border:1px solid rgba(6,214,160,0.2)}
+.debate-pos .debate-side-name{color:var(--coach)}
+
+/* EXTRA ACTIONS */
+.response-actions{margin-top:2px;display:flex;gap:7px;flex-wrap:wrap;padding-left:55px}
+.counter-btn{border:1px solid var(--border);background:transparent;border-radius:50px;padding:6px 13px;font-family:'DM Sans',sans-serif;font-size:0.76rem;color:var(--muted);cursor:pointer;transition:all 0.2s}
+.counter-btn:hover{border-color:var(--coach);color:var(--coach);background:var(--coach-bg)}
+
+/* SPECIAL CARDS */
+.plot-twist{background:linear-gradient(135deg,rgba(255,137,6,0.11),rgba(255,209,102,0.07));border:1px solid rgba(255,137,6,0.22);border-radius:14px;padding:13px 17px;font-size:0.84rem;color:var(--dromer);display:flex;gap:9px;align-items:flex-start;animation:fadeSlide 0.4s ease forwards;opacity:0}
+.offline-nudge{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:13px 17px;font-size:0.81rem;color:var(--muted);text-align:center;font-style:italic}
+.checkin-card{background:linear-gradient(135deg,rgba(6,214,160,0.08),rgba(6,214,160,0.04));border:1px solid rgba(6,214,160,0.2);border-radius:16px;padding:16px 18px;animation:fadeSlide 0.4s ease forwards;opacity:0}
+.checkin-title{font-family:'Fraunces',serif;font-size:1rem;margin-bottom:6px;color:var(--coach)}
+.checkin-sub{font-size:0.82rem;color:var(--muted);margin-bottom:14px;line-height:1.5}
+.checkin-options{display:flex;gap:8px;flex-wrap:wrap}
+.checkin-opt{border:1px solid var(--border);background:transparent;border-radius:50px;padding:8px 15px;font-family:'DM Sans',sans-serif;font-size:0.82rem;color:var(--text);cursor:pointer;transition:all 0.2s}
+.checkin-opt:hover{border-color:var(--coach);background:var(--coach-bg);color:var(--coach)}
+
+/* TYPING */
+.typing{display:flex;align-items:center;gap:5px;padding:11px 15px;background:var(--surface2);border-radius:18px;width:fit-content}
+.typing span{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:blink 1.2s infinite}
+.typing span:nth-child(2){animation-delay:0.2s}.typing span:nth-child(3){animation-delay:0.4s}
+@keyframes blink{0%,80%,100%{opacity:0.2;transform:scale(0.8)}40%{opacity:1;transform:scale(1)}}
+
+/* MODALS */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);backdrop-filter:blur(10px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--surface);border-radius:28px;padding:34px;max-width:520px;width:100%;position:relative;animation:modalIn 0.3s cubic-bezier(0.34,1.56,0.64,1) forwards;max-height:92vh;overflow-y:auto}
+.modal-box.panic-border{border:1px solid rgba(255,77,109,0.2)}
+.modal-box.calm-border{border:1px solid rgba(126,184,247,0.2)}
+.modal-box.summary-border{border:1px solid rgba(6,214,160,0.2)}
+@keyframes modalIn{from{opacity:0;transform:scale(0.88)}to{opacity:1;transform:scale(1)}}
+.modal-close{position:absolute;top:15px;right:15px;background:rgba(255,255,255,0.06);border:none;border-radius:50%;width:34px;height:34px;color:var(--muted);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.modal-close:hover{background:rgba(255,255,255,0.12);color:var(--text)}
+.modal-title{font-family:'Fraunces',serif;font-size:1.55rem;font-weight:700;margin-bottom:7px}
+.modal-sub{color:var(--muted);font-size:0.87rem;margin-bottom:22px;line-height:1.6}
+
+/* BREATHING */
+.breath-ring-wrap{display:flex;justify-content:center;margin:14px 0}
+.breath-ring{width:118px;height:118px;border-radius:50%;background:radial-gradient(circle,rgba(255,77,109,0.18),rgba(255,77,109,0.02));border:2px solid rgba(255,77,109,0.32);display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--text);text-align:center;line-height:1.5;transition:transform 0.6s ease}
+.breath-phase-lbl{text-align:center;font-size:0.78rem;color:var(--muted);margin-bottom:3px;min-height:18px}
+.breath-count{text-align:center;font-family:'Fraunces',serif;font-size:2.3rem;color:var(--text);margin-bottom:22px}
+.modal-primary-btn{width:100%;border:none;border-radius:14px;padding:13px;color:white;font-family:'DM Sans',sans-serif;font-size:0.93rem;font-weight:500;cursor:pointer;transition:opacity 0.2s,transform 0.15s;margin-top:4px}
+.modal-primary-btn:hover{transform:scale(1.02);opacity:0.92}
+.btn-orange{background:linear-gradient(135deg,#ff8c69,#e05a3a)}
+.btn-blue{background:linear-gradient(135deg,#7eb8f7,#4a90d9)}
+.btn-green{background:linear-gradient(135deg,var(--coach),#04a880)}
+
+/* GROUNDING */
+.grounding-title{font-family:'Fraunces',serif;font-size:1.1rem;margin-bottom:5px}
+.g-steps{display:flex;flex-direction:column;gap:9px;margin-bottom:18px}
+.g-step{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:11px 15px;display:flex;align-items:flex-start;gap:13px;transition:all 0.2s;opacity:0.38}
+.g-step.active{opacity:1;border-color:rgba(6,214,160,0.38);background:rgba(6,214,160,0.04);cursor:default}
+.g-step.done{opacity:0.58;border-color:rgba(6,214,160,0.22);cursor:pointer}
+.g-step.waiting{cursor:pointer}.g-step.waiting:hover{opacity:0.6}
+.g-num{width:30px;height:30px;border-radius:50%;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:700;font-size:0.88rem;flex-shrink:0;margin-top:2px;transition:all 0.3s}
+.g-step.done .g-num{background:var(--coach-bg);color:var(--coach);border-color:var(--coach)}
+.g-lbl{font-weight:500;font-size:0.86rem;margin-bottom:1px}
+.g-desc{font-size:0.76rem;color:var(--muted)}
+.g-inp{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(6,214,160,0.18);border-radius:8px;padding:7px 11px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.81rem;margin-top:7px;display:none}
+.g-step.active .g-inp{display:block}
+.g-inp:focus{outline:none;border-color:rgba(6,214,160,0.45)}
+.g-inp::placeholder{color:var(--muted)}
+
+/* BODYSCAN */
+.bodyscan-parts{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.bs-part{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:13px 16px;opacity:0;transition:opacity 0.5s,border-color 0.3s}
+.bs-part.visible{opacity:1}
+.bs-part.current{border-color:rgba(126,184,247,0.4);background:rgba(126,184,247,0.06)}
+.bs-title{font-weight:500;font-size:0.88rem;margin-bottom:3px;display:flex;align-items:center;gap:7px}
+.bs-dot{width:8px;height:8px;border-radius:50%;background:var(--calm);flex-shrink:0;animation:pulse-dot 1.5s ease-in-out infinite}
+@keyframes pulse-dot{0%,100%{opacity:0.4;transform:scale(0.8)}50%{opacity:1;transform:scale(1.2)}}
+.bs-text{font-size:0.8rem;color:var(--muted);line-height:1.55}
+.bs-progress{height:3px;background:rgba(255,255,255,0.07);border-radius:2px;margin-bottom:18px;overflow:hidden}
+.bs-progress-bar{height:100%;background:var(--calm);border-radius:2px;transition:width 0.8s ease}
+
+/* SUMMARY */
+.summary-section{margin-bottom:20px}
+.summary-section h4{font-family:'Fraunces',serif;font-size:0.95rem;color:var(--muted);margin-bottom:10px}
+.summary-stat-row{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
+.stat-box{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center}
+.stat-num{font-family:'Fraunces',serif;font-size:1.6rem;font-weight:700;line-height:1}
+.stat-lbl{font-size:0.72rem;color:var(--muted);margin-top:4px}
+.summary-patterns{display:flex;flex-direction:column;gap:7px}
+.pattern-row{display:flex;align-items:center;gap:10px;font-size:0.84rem}
+.pattern-bar-wrap{flex:1;height:6px;background:rgba(255,255,255,0.07);border-radius:3px;overflow:hidden}
+.pattern-bar{height:100%;border-radius:3px;transition:width 1s ease}
+.summary-insight{background:var(--coach-bg);border:1px solid rgba(6,214,160,0.2);border-radius:14px;padding:14px 16px;font-size:0.85rem;line-height:1.6;margin-bottom:18px}
+.summary-insight strong{color:var(--coach)}
+
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:3px}
 </style>
 </head>
 <body>
 <div class="app">
   <header>
     <div class="logo">Innerlijke<span>Stemmen</span></div>
-    <button class="panic-btn" onclick="openPanic()">🆘 Paniekaanval</button>
+    <div class="header-btns">
+      <button class="hbtn btn-calm" onclick="openCalm()">🌊 Rustig moment</button>
+      <button class="hbtn btn-summary" onclick="openSummary()">📊 Samenvatting</button>
+      <button class="hbtn btn-panic" onclick="openPanic()">🆘 Paniekaanval</button>
+    </div>
   </header>
 
   <div class="input-zone">
@@ -132,6 +205,14 @@
         <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
       </button>
     </div>
+  </div>
+
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="modeNormal" onclick="setMode('normal')">💬 Normaal</button>
+      <button class="mode-btn" id="modeDebate" onclick="setMode('debate')">⚔️ Dialoogmodus</button>
+    </div>
+    <span style="font-size:0.75rem;color:var(--muted)" id="modeHint">Personages reageren na elkaar</span>
   </div>
 
   <div class="chars-panel">
@@ -147,325 +228,507 @@
 
 <!-- PANIC MODAL -->
 <div class="modal-overlay" id="panicOverlay">
-  <div class="panic-modal">
-    <button class="panic-close" onclick="closePanic()">✕</button>
-
+  <div class="modal-box panic-border">
+    <button class="modal-close" onclick="closePanic()">✕</button>
     <div id="panicBreath">
-      <div class="panic-title">🫁 Adem met mij mee</div>
-      <p class="panic-sub">Je bent veilig. Je hoeft nu niets te doen behalve ademen. Volg het ritme rustig mee.</p>
-      <div class="breath-ring-wrap">
-        <div class="breath-ring" id="breathRing">Adem<br>in…</div>
-      </div>
-      <p class="breath-phase-label" id="breathPhaseLabel">Adem rustig in door je neus</p>
-      <p class="breath-counter" id="breathCounter">4</p>
-      <button class="panic-next-btn" onclick="showGrounding()">Ik voel me wat rustiger →</button>
+      <div class="modal-title">🫁 Adem met mij mee</div>
+      <p class="modal-sub">Je bent veilig. Je hoeft nu niets te doen behalve ademen. Volg het ritme rustig mee.</p>
+      <div class="breath-ring-wrap"><div class="breath-ring" id="breathRing">Adem<br>in…</div></div>
+      <p class="breath-phase-lbl" id="breathPhaseLbl">Adem rustig in door je neus</p>
+      <p class="breath-count" id="breathCount">4</p>
+      <button class="modal-primary-btn btn-orange" onclick="showGrounding()">Ik voel me wat rustiger →</button>
     </div>
-
     <div id="panicGrounding" style="display:none">
-      <div class="grounding-title">🌍 5-4-3-2-1 Grounding techniek</div>
-      <p class="panic-sub">Dit brengt je terug naar het hier en nu. Klik elk stap aan en benoem wat je ervaart.</p>
-      <div class="grounding-steps" id="groundingSteps">
-        <div class="g-step active" id="step5">
+      <div class="grounding-title">🌍 5-4-3-2-1 Grounding</div>
+      <p class="modal-sub">Breng jezelf terug naar het hier en nu. Klik elk stap aan.</p>
+      <div class="g-steps">
+        <div class="g-step active" id="gs5">
           <div class="g-num">5</div>
-          <div style="flex:1">
-            <div class="g-label">👁️ 5 dingen die je <em>ziet</em></div>
-            <div class="g-desc">Kijk rustig om je heen</div>
-            <input class="g-input" placeholder="bijv. mijn lamp, mijn handen, het raam…" onkeydown="if(event.key==='Enter')activateStep(4)">
-          </div>
+          <div style="flex:1"><div class="g-lbl">👁️ 5 dingen die je <em>ziet</em></div><div class="g-desc">Kijk rustig om je heen</div>
+          <input class="g-inp" placeholder="bijv. mijn lamp, mijn handen…" onkeydown="if(event.key==='Enter')gStep(4)"></div>
         </div>
-        <div class="g-step waiting" id="step4" onclick="activateStep(4)">
+        <div class="g-step waiting" id="gs4" onclick="gStep(4)">
           <div class="g-num">4</div>
-          <div style="flex:1">
-            <div class="g-label">🤚 4 dingen die je <em>voelt</em></div>
-            <div class="g-desc">Raak iets aan — de stoel, je kleding</div>
-            <input class="g-input" placeholder="bijv. de stoel onder me, mijn trui…" onkeydown="if(event.key==='Enter')activateStep(3)">
-          </div>
+          <div style="flex:1"><div class="g-lbl">🤚 4 dingen die je <em>voelt</em></div><div class="g-desc">Raak iets aan</div>
+          <input class="g-inp" placeholder="bijv. de stoel, mijn trui…" onkeydown="if(event.key==='Enter')gStep(3)"></div>
         </div>
-        <div class="g-step waiting" id="step3" onclick="activateStep(3)">
+        <div class="g-step waiting" id="gs3" onclick="gStep(3)">
           <div class="g-num">3</div>
-          <div style="flex:1">
-            <div class="g-label">👂 3 dingen die je <em>hoort</em></div>
-            <div class="g-desc">Luister aandachtig om je heen</div>
-            <input class="g-input" placeholder="bijv. verkeer, mijn adem, een vogel…" onkeydown="if(event.key==='Enter')activateStep(2)">
-          </div>
+          <div style="flex:1"><div class="g-lbl">👂 3 dingen die je <em>hoort</em></div><div class="g-desc">Luister om je heen</div>
+          <input class="g-inp" placeholder="bijv. verkeer, mijn adem…" onkeydown="if(event.key==='Enter')gStep(2)"></div>
         </div>
-        <div class="g-step waiting" id="step2" onclick="activateStep(2)">
+        <div class="g-step waiting" id="gs2" onclick="gStep(2)">
           <div class="g-num">2</div>
-          <div style="flex:1">
-            <div class="g-label">👃 2 dingen die je <em>ruikt</em></div>
-            <div class="g-desc">Misschien lucht, koffie, of niets bijzonders</div>
-            <input class="g-input" placeholder="bijv. frisse lucht, mijn thee…" onkeydown="if(event.key==='Enter')activateStep(1)">
-          </div>
+          <div style="flex:1"><div class="g-lbl">👃 2 dingen die je <em>ruikt</em></div><div class="g-desc">Neem een moment</div>
+          <input class="g-inp" placeholder="bijv. frisse lucht, koffie…" onkeydown="if(event.key==='Enter')gStep(1)"></div>
         </div>
-        <div class="g-step waiting" id="step1" onclick="activateStep(1)">
+        <div class="g-step waiting" id="gs1" onclick="gStep(1)">
           <div class="g-num">1</div>
-          <div style="flex:1">
-            <div class="g-label">👅 1 ding dat je <em>proeft</em></div>
-            <div class="g-desc">Een smaak in je mond</div>
-            <input class="g-input" placeholder="bijv. koffie, muntje, niets…">
-          </div>
+          <div style="flex:1"><div class="g-lbl">👅 1 ding dat je <em>proeft</em></div><div class="g-desc">Smaak in je mond</div>
+          <input class="g-inp" placeholder="bijv. koffie, niets…"></div>
         </div>
       </div>
-      <button class="done-btn" onclick="closePanic()">✅ Ik ben er weer — sluit</button>
+      <button class="modal-primary-btn btn-green" onclick="closePanic()">✅ Ik ben er weer — sluit</button>
     </div>
   </div>
 </div>
 
+<!-- CALM / BODYSCAN MODAL -->
+<div class="modal-overlay" id="calmOverlay">
+  <div class="modal-box calm-border">
+    <button class="modal-close" onclick="closeCalm()">✕</button>
+    <div id="calmIntro">
+      <div class="modal-title">🌊 Rustig moment</div>
+      <p class="modal-sub">Even pauzeren, zonder crisis. Kies wat je nu nodig hebt.</p>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button class="modal-primary-btn btn-blue" onclick="startBodyscan()" style="margin-top:0">🧘 Bodyscan (5 min)</button>
+        <button class="modal-primary-btn" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);margin-top:0" onclick="startBreathOnly()">🫁 Alleen ademhaling</button>
+        <button class="modal-primary-btn" style="background:var(--dromer-bg);border:1px solid rgba(255,209,102,0.2);color:var(--dromer);margin-top:0" onclick="startGratitude()">✨ Dankbaarheidsmoment</button>
+      </div>
+    </div>
+    <div id="calmBodyscan" style="display:none">
+      <div class="modal-title">🧘 Bodyscan</div>
+      <p class="modal-sub">Richt je aandacht rustig van hoofd naar tenen. Geen oordeel — alleen observeren.</p>
+      <div class="bs-progress"><div class="bs-progress-bar" id="bsProgressBar" style="width:0%"></div></div>
+      <div class="bodyscan-parts" id="bodyscanParts"></div>
+      <button class="modal-primary-btn btn-blue" id="bsNextBtn" onclick="bsNext()">Volgende →</button>
+    </div>
+    <div id="calmBreath" style="display:none">
+      <div class="modal-title">🫁 Ademhaling</div>
+      <p class="modal-sub">Volg het ritme. Adem in als de cirkel groeit, uit als die krimpt.</p>
+      <div class="breath-ring-wrap"><div class="breath-ring" id="calmBreathRing" style="border-color:rgba(126,184,247,0.4);background:radial-gradient(circle,rgba(126,184,247,0.15),rgba(126,184,247,0.02))">Adem<br>in…</div></div>
+      <p class="breath-phase-lbl" id="calmBreathLbl">Adem rustig in</p>
+      <p class="breath-count" id="calmBreathCount">4</p>
+      <button class="modal-primary-btn btn-blue" onclick="closeCalm()">Klaar — sluit</button>
+    </div>
+    <div id="calmGratitude" style="display:none">
+      <div class="modal-title">✨ Dankbaarheidsmoment</div>
+      <p class="modal-sub">Schrijf drie dingen op waar je vandaag dankbaar voor bent — hoe klein ook.</p>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px">
+        <input id="grat1" style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px 15px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.9rem;outline:none" placeholder="1. Ik ben dankbaar voor…">
+        <input id="grat2" style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px 15px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.9rem;outline:none" placeholder="2. Ik ben dankbaar voor…">
+        <input id="grat3" style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px 15px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.9rem;outline:none" placeholder="3. Ik ben dankbaar voor…">
+      </div>
+      <button class="modal-primary-btn btn-green" onclick="closeCalm()">✅ Mooi. Sluit</button>
+    </div>
+  </div>
+</div>
+
+<!-- SUMMARY MODAL -->
+<div class="modal-overlay" id="summaryOverlay">
+  <div class="modal-box summary-border">
+    <button class="modal-close" onclick="closeSummary()">✕</button>
+    <div class="modal-title">📊 Sessie-overzicht</div>
+    <p class="modal-sub">Wat er vandaag in je hoofd speelde — en hoe je ermee omging.</p>
+    <div id="summaryContent"></div>
+    <button class="modal-primary-btn btn-green" onclick="closeSummary()">Sluit</button>
+  </div>
+</div>
+
 <script>
-// ── CHARACTERS ──
-// IMPORTANT DESIGN PRINCIPLE:
-// Negative characters RECOGNISE & COMPASSIONATELY LABEL the feeling pattern.
-// They do NOT amplify or validate the negative thought as true.
-// The Coach always follows to gently reframe.
+// ══ DATA ══
 const characters = {
-  catastrofe: {
-    name: "De Catastrofedenker",
-    emoji: "🌪️",
-    color: "var(--catastrofe)",
-    cls: "char-catastrofe",
-    desc: "Herkent zorgen en angsten",
-    power: 60,
-    responses: [
-      () => `Ik herken dit. Dit is de Catastrofedenker die aan het woord is — de stem die altijd het ergste scenario bedenkt. Hij probeert je eigenlijk te beschermen, ook al voelt het niet zo. Het is oké dat die stem er is.`,
-      () => `Dit gevoel van "het gaat fout" ken ik goed. Het is een patroon — de angstgedachte die groter lijkt dan hij is. Je hoeft er niet in mee te gaan. Je mag hem gewoon opmerken.`,
-      () => `Weet je wat ik zie? Iemand die iets écht belangrijk vindt. De Catastrofedenker wordt namelijk het luidst als je ergens echt om geeft. Dat is eigenlijk een teken van hoe serieus je dit neemt.`,
+  catastrofe:{name:"De Catastrofedenker",emoji:"🌪️",color:"var(--catastrofe)",cls:"char-catastrofe",desc:"Herkent zorgen en angsten",
+    responses:[
+      ()=>`Ik herken dit patroon — de Catastrofedenker is aan het woord. Die stem die altijd het ergste scenario ziet. Hij probeert je te beschermen, ook al voelt het niet zo. Het is oké dat hij er is.`,
+      ()=>`Dit gevoel van "het gaat fout" ken ik goed. Het is een patroon — de angstgedachte die groter lijkt dan hij is. Je hoeft er niet in mee te gaan. Je mag hem gewoon opmerken.`,
+      ()=>`Weet je wat ik zie? Iemand die iets écht belangrijk vindt. De Catastrofedenker wordt het luidst als je ergens echt om geeft. Dat is eigenlijk een teken van hoe serieus je dit neemt.`,
+    ],
+    debateLines:[
+      `Maar wat als het écht fout gaat? We kunnen ons beter voorbereiden op het ergste.`,
+      `Deze angst is er niet voor niets. Misschien moeten we dit serieus nemen.`,
+      `Ik begrijp dat de Coach optimistisch is, maar de risico's zijn reëel.`,
     ]
   },
-  criticus: {
-    name: "De Innerlijke Criticus",
-    emoji: "👁️",
-    color: "var(--criticus)",
-    cls: "char-criticus",
-    desc: "Benoemt zelfkritiek met zachtheid",
-    power: 50,
-    responses: [
-      () => `Dit is de stem van de Innerlijke Criticus — de stem die zegt dat je tekortschiet. Maar let op: die stem is niet de waarheid. Het is een oud patroon dat jou ooit probeerde te beschermen door streng te zijn.`,
-      () => `Ik hoor hoe hard je voor jezelf bent. Zou je zo ook over een goede vriend praten? Waarschijnlijk niet. Jij verdient dezelfde vriendelijkheid die je anderen geeft.`,
-      () => `De criticus is actief. Hij denkt dat hij helpt door streng te zijn — maar streng zijn maakt het zelden beter. Wat zou er veranderen als je iets milder naar jezelf keek?`,
+  criticus:{name:"De Innerlijke Criticus",emoji:"👁️",color:"var(--criticus)",cls:"char-criticus",desc:"Benoemt zelfkritiek met zachtheid",
+    responses:[
+      ()=>`Dit is de stem van de Innerlijke Criticus — die zegt dat je tekortschiet. Maar die stem is niet de waarheid. Het is een oud patroon dat je ooit probeerde te beschermen door streng te zijn.`,
+      ()=>`Ik hoor hoe hard je voor jezelf bent. Zou je zo ook over een goede vriend praten? Waarschijnlijk niet. Jij verdient dezelfde vriendelijkheid.`,
+      ()=>`De criticus is actief. Hij denkt dat hij helpt door streng te zijn — maar streng zijn maakt het zelden beter.`,
+    ],
+    debateLines:[
+      `Je had dit kunnen voorkomen als je eerder was begonnen.`,
+      `Anderen zouden dit makkelijker vinden. Waarom lukt het jou niet?`,
+      `Ik stel alleen maar vast wat er is. Dat is toch eerlijk?`,
     ]
   },
-  coach: {
-    name: "De Rustige Coach",
-    emoji: "🌿",
-    color: "var(--coach)",
-    cls: "char-coach",
-    desc: "Helpt relativeren en groeien",
-    power: 70,
-    responses: [
-      () => `Die gedachte mag er zijn — en tegelijk: is die 100% zeker waar? Gedachten zijn geen feiten. Ze voelen als feiten, maar het zijn verhalen die je brein vertelt. Wat is er wél zeker op dit moment?`,
-      () => `Adem even. Je hoeft dit nu niet op te lossen. Wat is één kleine, concrete stap die je vandaag kunt zetten — hoe klein ook? Zelfs één stap is genoeg.`,
-      () => `Je bent sterker dan deze gedachte doet denken. Denk eens terug: wanneer heb je iets overwonnen wat ook heel zwaar voelde? Je hebt dat gedaan. Je kunt dit ook.`,
-      () => `Laten we dit even van een afstand bekijken. Over een jaar — hoe groot is de kans dat dit moment dan nog even zwaar voelt? Waarschijnlijk kleiner dan het nu lijkt.`,
-      () => `Het is helemaal normaal om dit te voelen. Iedereen worstelt soms. Dat je dit bespreekt betekent dat je al bezig bent — en dat is meer dan genoeg.`,
+  coach:{name:"De Rustige Coach",emoji:"🌿",color:"var(--coach)",cls:"char-coach",desc:"Helpt relativeren en groeien",
+    responses:[
+      ()=>`Die gedachte mag er zijn — en tegelijk: is die 100% zeker waar? Gedachten zijn geen feiten. Ze voelen als feiten, maar het zijn verhalen die je brein vertelt.`,
+      ()=>`Adem even. Je hoeft dit nu niet op te lossen. Wat is één kleine, concrete stap die je vandaag kunt zetten — hoe klein ook?`,
+      ()=>`Je bent sterker dan deze gedachte doet denken. Denk eens terug: wanneer heb je iets overwonnen wat ook heel zwaar voelde?`,
+      ()=>`Laten we dit van een afstand bekijken. Over een jaar — hoe groot is de kans dat dit dan nog even zwaar voelt?`,
+      ()=>`Het is heel normaal om dit te voelen. Iedereen worstelt soms. Dat je dit bespreekt betekent dat je al bezig bent — en dat is meer dan genoeg.`,
+    ],
+    debateLines:[
+      `Wat als we dit eens anders bekijken? Is er ook een scenario waarbij het wél goed loopt?`,
+      `Elke uitdaging brengt twijfel mee — maar twijfel betekent niet falen.`,
+      `Vriendelijkheid voor jezelf is geen zwakte. Het is de basis van echte groei.`,
+      `Je hebt al eerder moeilijke momenten overwonnen. Dat vermogen is er nog steeds.`,
     ]
   },
-  dromer: {
-    name: "De Dromer",
-    emoji: "✨",
-    color: "var(--dromer)",
-    cls: "char-dromer",
-    desc: "Ziet mogelijkheden en hoop",
-    power: 45,
-    responses: [
-      () => `Stel je eens voor dat dit het begin is van iets nieuws. Wat als deze moeilijkheid je iets leert wat je anders nooit had ontdekt?`,
-      () => `Elk verhaal heeft moeilijke scènes. Maar jij bent de hoofdpersoon — en die geeft niet op bij het eerste struikelblok.`,
-      () => `Wat als je over zes maanden terugkijkt op dit moment en denkt: "dát was het keerpunt waarop ik koos om door te gaan"?`,
+  dromer:{name:"De Dromer",emoji:"✨",color:"var(--dromer)",cls:"char-dromer",desc:"Ziet mogelijkheden en hoop",
+    responses:[
+      ()=>`Stel je eens voor dat dit het begin is van iets nieuws. Wat als deze moeilijkheid je iets leert wat je anders nooit had ontdekt?`,
+      ()=>`Elk verhaal heeft moeilijke scènes. Maar jij bent de hoofdpersoon — en die geeft niet op bij het eerste struikelblok.`,
+      ()=>`Wat als je over zes maanden terugkijkt op dit moment en denkt: "dát was het keerpunt"?`,
     ]
   }
 };
 
-const plotTwists = [
-  "Wist je dat angst voor falen vaak betekent dat je het echt goed wil doen? Dat is een kracht, geen zwakte.",
-  "De stem die zegt 'je gaat falen' en de stem die zegt 'je kunt het' — beide zijn jij. Welke geef jij vandaag het podium?",
+const plotTwists=[
+  "Angst voor falen betekent vaak dat je het echt goed wil doen. Dat is een kracht, geen zwakte.",
+  "De stem die zegt 'je gaat falen' en de stem die zegt 'je kunt het' — beide zijn jij. Welke geef je vandaag het podium?",
   "In elk goed verhaal twijfelt de held. Dit is jouw twijfelscène — geen eindscène.",
   "Gedachten zijn geen feiten. Ze voelen als feiten, maar het zijn verhalen die je brein vertelt.",
   "Wat je nu voelt is tijdelijk. Wat je nu doet met dit gevoel — dát telt.",
-  "De Catastrofedenker en de Coach zijn allebei onderdelen van jou. Ze werken samen — de een signaleert, de ander kalmeer.",
 ];
 
-let messageCount = 0;
-let characterPowers = { catastrofe: 60, criticus: 50, coach: 70, dromer: 45 };
+const bodyscanParts=[
+  {title:"👤 Hoofd & gezicht",text:"Merk op hoe je hoofd aanvoelt. Is er spanning in je voorhoofd? Je kaken? Laat je tanden lichtjes uiteen, ontspan je gezichtsspieren. Geen oordeel — gewoon opmerken."},
+  {title:"🦴 Nek & schouders",text:"Veel spanning zit hier opgeslagen. Adem in, trek je schouders even op naar je oren, en laat ze bij het uitademen helemaal zakken. Voel het verschil."},
+  {title:"❤️ Borst & hart",text:"Leg een hand op je borst als dat fijn voelt. Voel je hartslag. Voel hoe je borst op en neer gaat met elk ademhaling. Je hart werkt altijd voor jou."},
+  {title:"🌬️ Buik & ademhaling",text:"Adem rustig naar je buik — niet naar je borst. Voel hoe je buik uitzet bij het inademen en terugkomt bij het uitademen. Dit is je anker."},
+  {title:"🦵 Benen & voeten",text:"Voel de druk van je benen op de stoel of het bed. Beweeg je tenen even. Voel de grond onder je voeten. Je bent hier. Je bent stabiel."},
+];
 
-function renderChars() {
-  const grid = document.getElementById('charsGrid');
-  grid.innerHTML = '';
-  Object.entries(characters).forEach(([key, c]) => {
-    const p = characterPowers[key];
-    const div = document.createElement('div');
-    div.className = 'char-card';
-    div.innerHTML = `<div class="char-top"><span class="char-emoji">${c.emoji}</span><span class="char-card-name" style="color:${c.color}">${c.name.replace('De ','')}</span></div><div class="char-desc">${c.desc}</div><div class="char-power"><div class="char-power-bar" style="width:${p}%;background:${c.color}"></div></div>`;
-    grid.appendChild(div);
+// ══ STATE ══
+let messageCount=0, negativeStreak=0, currentMode='normal';
+let characterPowers={catastrofe:60,criticus:50,coach:70,dromer:45};
+let sessionStats={thoughts:0,catastrofe:0,criticus:0,coach:0,dromer:0,checkins:0};
+
+// ══ RENDER ══
+function renderChars(){
+  const g=document.getElementById('charsGrid');g.innerHTML='';
+  Object.entries(characters).forEach(([k,c])=>{
+    const p=characterPowers[k];
+    const d=document.createElement('div');d.className='char-card';
+    d.innerHTML=`<div class="char-top"><span class="char-emoji">${c.emoji}</span><span class="char-card-name" style="color:${c.color}">${c.name.replace('De ','')}</span></div><div class="char-desc">${c.desc}</div><div class="char-power"><div class="char-power-bar" style="width:${p}%;background:${c.color}"></div></div>`;
+    g.appendChild(d);
   });
 }
 
-function detectCharacter(t) {
-  const s = t.toLowerCase();
-  if (/stom|slecht|niet goed|zwak|lui|dom|waardeloos|schuld|mijn fout/.test(s)) return 'criticus';
-  if (/misschien|zou kunnen|dromen|hoop|stel je voor|wat als het/.test(s)) return 'dromer';
-  return 'catastrofe';
+function setMode(m){
+  currentMode=m;
+  document.getElementById('modeNormal').classList.toggle('active',m==='normal');
+  document.getElementById('modeDebate').classList.toggle('active',m==='debate');
+  document.getElementById('modeHint').textContent=m==='normal'?'Personages reageren na elkaar':'Negatieve en positieve stem debatteren';
 }
 
-async function processThought() {
-  const input = document.getElementById('thoughtInput');
-  const thought = input.value.trim();
-  if (!thought) return;
+// ══ PROCESS ══
+async function processThought(){
+  const inp=document.getElementById('thoughtInput');
+  const thought=inp.value.trim();if(!thought)return;
   document.getElementById('emptyState')?.remove();
-  addMessage('user', null, thought);
-  input.value = '';
+  addMessage('user',null,thought);
+  inp.value='';
   messageCount++;
+  sessionStats.thoughts++;
 
-  const charKey = detectCharacter(thought);
-  const char = characters[charKey];
+  const charKey=detectChar(thought);
+  sessionStats[charKey]=(sessionStats[charKey]||0)+1;
 
-  // Step 1: character labels the feeling
-  await delay(500);
-  showTyping(char.cls);
-  await delay(1200);
-  removeTyping();
-  addMessage('char', char, char.responses[Math.floor(Math.random() * char.responses.length)](), true);
+  if(['catastrofe','criticus'].includes(charKey)){
+    negativeStreak++;
+  } else { negativeStreak=0; }
 
-  // Step 2: Coach always follows to reframe
-  await delay(800);
-  showTyping('char-coach');
-  await delay(1300);
-  removeTyping();
-  addMessage('char', characters.coach, characters.coach.responses[Math.floor(Math.random() * characters.coach.responses.length)](), true);
+  if(currentMode==='debate'){
+    await runDebate(thought,charKey);
+  } else {
+    await runNormal(thought,charKey);
+  }
 
-  // Slowly reduce negative character dominance
-  if (['catastrofe','criticus'].includes(charKey)) {
-    characterPowers[charKey] = Math.max(15, characterPowers[charKey] - 3);
-    characterPowers.coach = Math.min(95, characterPowers.coach + 2);
+  if(['catastrofe','criticus'].includes(charKey)){
+    characterPowers[charKey]=Math.max(15,characterPowers[charKey]-3);
+    characterPowers.coach=Math.min(95,characterPowers.coach+2);
   }
   renderChars();
 
-  if (messageCount % 3 === 0) { await delay(500); addPlotTwist(); }
+  if(messageCount%3===0){await delay(500);addPlotTwist();}
   await delay(300);
   addCounterOptions();
-  if (messageCount % 5 === 0) { await delay(400); addOfflineNudge(); }
+
+  // Check-in after 3 negative thoughts in a row
+  if(negativeStreak>=3){await delay(600);addCheckin();negativeStreak=0;}
+
+  if(messageCount%6===0){await delay(400);addOfflineNudge();}
 }
 
-function addMessage(type, char, text, animate) {
-  const d = document.getElementById('dialogue');
-  const div = document.createElement('div');
-  div.className = 'message ' + (type === 'user' ? 'user' : (char?.cls || ''));
-  if (animate) div.style.animationDelay = '0.05s';
-  if (type === 'user') {
-    div.innerHTML = `<div class="avatar" style="background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.1)">🧠</div><div class="bubble">${esc(text)}</div>`;
-  } else {
-    div.innerHTML = `<div class="avatar">${char.emoji}</div><div class="bubble"><div class="character-name">${char.name}</div><div>${esc(text)}</div></div>`;
+async function runNormal(thought,charKey){
+  const char=characters[charKey];
+  showTyping(char.cls);await delay(1200);removeTyping();
+  addMessage('char',char,char.responses[Math.floor(Math.random()*char.responses.length)](),true);
+  sessionStats.coach=(sessionStats.coach||0)+1;
+  await delay(900);
+  showTyping('char-coach');await delay(1300);removeTyping();
+  addMessage('char',characters.coach,characters.coach.responses[Math.floor(Math.random()*characters.coach.responses.length)](),true);
+}
+
+async function runDebate(thought,charKey){
+  // Show debate card side-by-side
+  const negChar=characters[charKey==='criticus'?'criticus':'catastrofe'];
+  const posChar=characters.coach;
+  await delay(600);
+  const d=document.getElementById('dialogue');
+  const card=document.createElement('div');card.className='debate-stage';
+  card.innerHTML=`
+    <div class="debate-header">⚔️ Dialoog in je hoofd</div>
+    <div class="debate-row">
+      <div class="debate-side debate-neg">
+        <div class="debate-side-name">${negChar.emoji} ${negChar.name}</div>
+        <div id="debateNegText" style="opacity:0;transition:opacity 0.4s">…</div>
+      </div>
+      <div class="debate-side debate-pos">
+        <div class="debate-side-name">${posChar.emoji} ${posChar.name}</div>
+        <div id="debatePosText" style="opacity:0;transition:opacity 0.4s">…</div>
+      </div>
+    </div>`;
+  d.appendChild(card);
+  card.scrollIntoView({behavior:'smooth',block:'end'});
+
+  await delay(600);
+  const negLine=negChar.debateLines[Math.floor(Math.random()*negChar.debateLines.length)];
+  document.getElementById('debateNegText').textContent=negLine;
+  document.getElementById('debateNegText').style.opacity='1';
+
+  await delay(1200);
+  const posLine=posChar.debateLines[Math.floor(Math.random()*posChar.debateLines.length)];
+  document.getElementById('debatePosText').textContent=posLine;
+  document.getElementById('debatePosText').style.opacity='1';
+
+  await delay(800);
+  // Coach adds a follow-up as a full message
+  showTyping('char-coach');await delay(1100);removeTyping();
+  addMessage('char',posChar,posChar.responses[Math.floor(Math.random()*posChar.responses.length)](),true);
+}
+
+function detectChar(t){
+  const s=t.toLowerCase();
+  if(/stom|slecht|niet goed|zwak|lui|dom|waardeloos|schuld|mijn fout/.test(s))return'criticus';
+  if(/misschien|zou kunnen|dromen|hoop|stel je voor|wat als het/.test(s))return'dromer';
+  return'catastrofe';
+}
+
+function addMessage(type,char,text,animate){
+  const d=document.getElementById('dialogue');
+  const div=document.createElement('div');
+  div.className='message '+(type==='user'?'user':(char?.cls||''));
+  if(animate)div.style.animationDelay='0.05s';
+  if(type==='user'){
+    div.innerHTML=`<div class="avatar" style="background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.1)">🧠</div><div class="bubble">${esc(text)}</div>`;
+  }else{
+    div.innerHTML=`<div class="avatar">${char.emoji}</div><div class="bubble"><div class="character-name">${char.name}</div><div>${esc(text)}</div></div>`;
   }
-  d.appendChild(div);
-  div.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  d.appendChild(div);div.scrollIntoView({behavior:'smooth',block:'end'});
 }
 
-function addCounterOptions() {
-  const d = document.getElementById('dialogue');
-  const wrap = document.createElement('div');
-  wrap.className = 'response-actions';
-  wrap.innerHTML = `<span style="font-size:0.75rem;color:var(--muted);align-self:center">Nog een stem:</span><button class="counter-btn" onclick="addExtraResponse('dromer',this.parentElement)">✨ Dromer</button><button class="counter-btn" onclick="addExtraResponse('criticus',this.parentElement)">👁️ Criticus</button>`;
-  d.appendChild(wrap);
+function addCounterOptions(){
+  const d=document.getElementById('dialogue');
+  const w=document.createElement('div');w.className='response-actions';
+  w.innerHTML=`<span style="font-size:0.74rem;color:var(--muted);align-self:center">Nog een stem:</span><button class="counter-btn" onclick="addExtra('dromer',this.parentElement)">✨ Dromer</button><button class="counter-btn" onclick="addExtra('criticus',this.parentElement)">👁️ Criticus</button>`;
+  d.appendChild(w);
+}
+async function addExtra(key,wrap){
+  wrap.remove();const c=characters[key];
+  showTyping(c.cls);await delay(1000);removeTyping();
+  addMessage('char',c,c.responses[Math.floor(Math.random()*c.responses.length)](),true);
 }
 
-async function addExtraResponse(key, wrap) {
-  wrap.remove();
-  const char = characters[key];
-  showTyping(char.cls);
-  await delay(1000);
-  removeTyping();
-  addMessage('char', char, char.responses[Math.floor(Math.random() * char.responses.length)](), true);
-}
-
-function addPlotTwist() {
-  const d = document.getElementById('dialogue');
-  const div = document.createElement('div');
-  div.className = 'plot-twist';
-  div.innerHTML = `<span style="font-size:1.2rem;flex-shrink:0">🎬</span><span><strong>Moment van inzicht:</strong> ${esc(plotTwists[Math.floor(Math.random()*plotTwists.length)])}</span>`;
+function addPlotTwist(){
+  const d=document.getElementById('dialogue');
+  const div=document.createElement('div');div.className='plot-twist';
+  div.innerHTML=`<span style="font-size:1.15rem;flex-shrink:0">🎬</span><span><strong>Moment van inzicht:</strong> ${esc(plotTwists[Math.floor(Math.random()*plotTwists.length)])}</span>`;
   d.appendChild(div);
 }
 
-function addOfflineNudge() {
-  const d = document.getElementById('dialogue');
-  const div = document.createElement('div');
-  div.className = 'offline-nudge';
-  div.textContent = '💤 Even pauzeren is ook oké. Ga iets doen met je handen — even weg van de woorden.';
+function addOfflineNudge(){
+  const d=document.getElementById('dialogue');
+  const div=document.createElement('div');div.className='offline-nudge';
+  div.textContent='💤 Even pauzeren is ook oké. Ga iets doen met je handen — even weg van de woorden.';
   d.appendChild(div);
 }
 
-function showTyping(cls) {
-  const d = document.getElementById('dialogue');
-  const t = document.createElement('div');
-  t.id = 'typingIndicator';
-  t.className = 'message ' + cls;
-  t.innerHTML = `<div class="typing"><span></span><span></span><span></span></div>`;
-  d.appendChild(t);
-  t.scrollIntoView({ behavior: 'smooth', block: 'end' });
+function addCheckin(){
+  sessionStats.checkins++;
+  const d=document.getElementById('dialogue');
+  const div=document.createElement('div');div.className='checkin-card';
+  div.innerHTML=`
+    <div class="checkin-title">🌿 Even inchecken…</div>
+    <div class="checkin-sub">Je hebt een aantal zware gedachten gedeeld. Hoe voel je je nu, op dit moment?</div>
+    <div class="checkin-options">
+      <button class="checkin-opt" onclick="answerCheckin('Heel gespannen',this)">😰 Heel gespannen</button>
+      <button class="checkin-opt" onclick="answerCheckin('Een beetje beter',this)">😐 Een beetje beter</button>
+      <button class="checkin-opt" onclick="answerCheckin('Rustiger door dit te delen',this)">😌 Rustiger</button>
+      <button class="checkin-opt" onclick="answerCheckin('Ik weet het niet',this)">🤷 Weet niet</button>
+    </div>`;
+  d.appendChild(div);div.scrollIntoView({behavior:'smooth',block:'end'});
 }
-function removeTyping() { document.getElementById('typingIndicator')?.remove(); }
-function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
-function esc(t) { return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-document.getElementById('thoughtInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); processThought(); }
+async function answerCheckin(answer,btn){
+  const card=btn.closest('.checkin-card');
+  card.querySelectorAll('.checkin-opt').forEach(b=>b.disabled=true);
+  card.querySelectorAll('.checkin-opt').forEach(b=>b.style.opacity=b===btn?'1':'0.35');
+  await delay(400);
+  showTyping('char-coach');await delay(1100);removeTyping();
+  const responses={
+    'Heel gespannen':`Dat is eerlijk en dapper om te zeggen. Je hoeft dat gevoel niet weg te drukken. Adem even rustig — de 🌊 Rustig moment knop kan helpen als je wil.`,
+    'Een beetje beter':`Goed te horen. Een beetje beter is ook echt beter. Je bent al bezig — en dat telt.`,
+    'Rustiger door dit te delen':`Mooi. Soms helpt het om gedachten een naam te geven en ze niet alleen te dragen. Ga zo door.`,
+    'Ik weet het niet':`Dat mag. Soms is "ik weet het niet" het eerlijkste antwoord. Je hoeft het nu niet te weten.`,
+  };
+  addMessage('char',characters.coach,responses[answer]||`Dank je voor je eerlijkheid.`,true);
+}
+
+function showTyping(cls){
+  const d=document.getElementById('dialogue');
+  const t=document.createElement('div');t.id='typingIndicator';t.className='message '+cls;
+  t.innerHTML=`<div class="typing"><span></span><span></span><span></span></div>`;
+  d.appendChild(t);t.scrollIntoView({behavior:'smooth',block:'end'});
+}
+function removeTyping(){document.getElementById('typingIndicator')?.remove();}
+function delay(ms){return new Promise(r=>setTimeout(r,ms));}
+function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+document.getElementById('thoughtInput').addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();processThought();}
 });
 
-// ── PANIC / BREATHING ──
-let breathTimer;
-const breathPhases = [
-  { label: 'Adem rustig in door je neus', ring: 'Adem\nin…', duration: 4, scale: 1.4 },
-  { label: 'Houd even vast…', ring: 'Houd\nvast…', duration: 4, scale: 1.4 },
-  { label: 'Adem langzaam uit door je mond', ring: 'Adem\nuit…', duration: 6, scale: 1.0 },
+// ══ PANIC ══
+let breathTimer,breathPhaseIdx=0,breathCountVal=4;
+const breathPhases=[
+  {lbl:'Adem rustig in door je neus',ring:'Adem\nin…',dur:4,scale:1.4},
+  {lbl:'Houd even vast…',ring:'Houd\nvast…',dur:4,scale:1.4},
+  {lbl:'Adem langzaam uit door je mond',ring:'Adem\nuit…',dur:6,scale:1.0},
 ];
-let breathPhaseIdx = 0, breathCount = 4;
-
-function openPanic() {
+function openPanic(){
   document.getElementById('panicOverlay').classList.add('open');
-  document.getElementById('panicBreath').style.display = 'block';
-  document.getElementById('panicGrounding').style.display = 'none';
-  breathPhaseIdx = 0;
-  runBreathPhase();
+  document.getElementById('panicBreath').style.display='block';
+  document.getElementById('panicGrounding').style.display='none';
+  breathPhaseIdx=0;runBreathPhase('breathRing','breathPhaseLbl','breathCount');
 }
-function closePanic() {
-  document.getElementById('panicOverlay').classList.remove('open');
+function closePanic(){document.getElementById('panicOverlay').classList.remove('open');clearInterval(breathTimer);}
+function showGrounding(){
   clearInterval(breathTimer);
+  document.getElementById('panicBreath').style.display='none';
+  document.getElementById('panicGrounding').style.display='block';
 }
-function runBreathPhase() {
-  clearInterval(breathTimer);
-  const ph = breathPhases[breathPhaseIdx];
-  const ring = document.getElementById('breathRing');
-  document.getElementById('breathPhaseLabel').textContent = ph.label;
-  ring.innerHTML = ph.ring.replace('\n','<br>');
-  ring.style.transform = `scale(${ph.scale})`;
-  breathCount = ph.duration;
-  document.getElementById('breathCounter').textContent = breathCount;
-  breathTimer = setInterval(() => {
-    breathCount--;
-    document.getElementById('breathCounter').textContent = breathCount;
-    if (breathCount <= 0) {
-      clearInterval(breathTimer);
-      breathPhaseIdx = (breathPhaseIdx + 1) % breathPhases.length;
-      setTimeout(runBreathPhase, 400);
-    }
-  }, 1000);
-}
-function showGrounding() {
-  clearInterval(breathTimer);
-  document.getElementById('panicBreath').style.display = 'none';
-  document.getElementById('panicGrounding').style.display = 'block';
-}
-function activateStep(n) {
-  [5,4,3,2,1].forEach(i => {
-    const el = document.getElementById('step'+i);
-    if (!el) return;
+function gStep(n){
+  [5,4,3,2,1].forEach(i=>{
+    const el=document.getElementById('gs'+i);if(!el)return;
     el.classList.remove('active','done','waiting');
-    if (i === n) el.classList.add('active');
-    else if (i > n) el.classList.add('done');
+    if(i===n)el.classList.add('active');
+    else if(i>n)el.classList.add('done');
     else el.classList.add('waiting');
   });
-  setTimeout(() => document.getElementById('step'+n)?.querySelector('.g-input')?.focus(), 60);
+  setTimeout(()=>document.getElementById('gs'+n)?.querySelector('.g-inp')?.focus(),60);
 }
-document.getElementById('panicOverlay').addEventListener('click', e => {
-  if (e.target === document.getElementById('panicOverlay')) closePanic();
-});
+function runBreathPhase(ringId,lblId,countId){
+  clearInterval(breathTimer);
+  const ph=breathPhases[breathPhaseIdx];
+  const ring=document.getElementById(ringId);
+  if(!ring)return;
+  document.getElementById(lblId).textContent=ph.lbl;
+  ring.innerHTML=ph.ring.replace('\n','<br>');
+  ring.style.transform=`scale(${ph.scale})`;
+  breathCountVal=ph.dur;
+  document.getElementById(countId).textContent=breathCountVal;
+  breathTimer=setInterval(()=>{
+    breathCountVal--;
+    document.getElementById(countId).textContent=breathCountVal;
+    if(breathCountVal<=0){
+      clearInterval(breathTimer);
+      breathPhaseIdx=(breathPhaseIdx+1)%breathPhases.length;
+      setTimeout(()=>runBreathPhase(ringId,lblId,countId),400);
+    }
+  },1000);
+}
+document.getElementById('panicOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('panicOverlay'))closePanic();});
+
+// ══ CALM / BODYSCAN ══
+let bsIndex=0,calmBreathTimer;
+function openCalm(){
+  document.getElementById('calmOverlay').classList.add('open');
+  ['calmIntro','calmBodyscan','calmBreath','calmGratitude'].forEach(id=>document.getElementById(id).style.display='none');
+  document.getElementById('calmIntro').style.display='block';
+}
+function closeCalm(){
+  document.getElementById('calmOverlay').classList.remove('open');
+  clearInterval(calmBreathTimer);clearInterval(breathTimer);
+}
+function startBodyscan(){
+  document.getElementById('calmIntro').style.display='none';
+  document.getElementById('calmBodyscan').style.display='block';
+  bsIndex=0;renderBodyscan();
+}
+function renderBodyscan(){
+  const container=document.getElementById('bodyscanParts');container.innerHTML='';
+  bodyscanParts.forEach((p,i)=>{
+    const div=document.createElement('div');div.className='bs-part';div.id='bsPart'+i;
+    div.innerHTML=`<div class="bs-title">${i===bsIndex?'<span class="bs-dot"></span>':''} ${p.title}</div><div class="bs-text">${p.text}</div>`;
+    container.appendChild(div);
+    setTimeout(()=>div.classList.add('visible'),i*60);
+    if(i===bsIndex)div.classList.add('current');
+  });
+  document.getElementById('bsProgressBar').style.width=((bsIndex/bodyscanParts.length)*100)+'%';
+  document.getElementById('bsNextBtn').textContent=bsIndex>=bodyscanParts.length-1?'✅ Klaar — sluit':'Volgende →';
+}
+function bsNext(){
+  if(bsIndex>=bodyscanParts.length-1){closeCalm();return;}
+  bsIndex++;renderBodyscan();
+  document.getElementById('bsPart'+bsIndex)?.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function startBreathOnly(){
+  document.getElementById('calmIntro').style.display='none';
+  document.getElementById('calmBreath').style.display='block';
+  breathPhaseIdx=0;runBreathPhase('calmBreathRing','calmBreathLbl','calmBreathCount');
+}
+function startGratitude(){
+  document.getElementById('calmIntro').style.display='none';
+  document.getElementById('calmGratitude').style.display='block';
+  setTimeout(()=>document.getElementById('grat1')?.focus(),100);
+}
+document.getElementById('calmOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('calmOverlay'))closeCalm();});
+
+// ══ SUMMARY ══
+function openSummary(){
+  const total=sessionStats.thoughts;
+  const insights=[];
+  if(total===0){
+    document.getElementById('summaryContent').innerHTML=`<div class="offline-nudge" style="margin-bottom:20px">Je hebt deze sessie nog geen gedachten gedeeld.</div>`;
+  } else {
+    const dominant=Object.entries({catastrofe:sessionStats.catastrofe,criticus:sessionStats.criticus,dromer:sessionStats.dromer})
+      .sort((a,b)=>b[1]-a[1])[0];
+    const domChar=characters[dominant[0]];
+
+    if(dominant[1]>0)insights.push(`Je ${domChar.name} was vandaag het meest actief. Dat betekent niet dat het waar is wat die stem zegt — alleen dat je brein hard werkte.`);
+    if(sessionStats.coach>2)insights.push(`De Coach heeft ${sessionStats.coach} keer gereageerd. Elke keer dat je zijn perspectief hoorde, oefende je afstand nemen van je gedachten.`);
+    if(sessionStats.checkins>0)insights.push(`Je hebt ${sessionStats.checkins} keer bij jezelf ingecheckt. Dat is zelfbewustzijn in actie.`);
+
+    const insightText=insights.length?insights[0]:`Je hebt vandaag ${total} gedachten gedeeld en er bewust naar gekeken. Dat is al meer dan de meeste mensen doen.`;
+
+    document.getElementById('summaryContent').innerHTML=`
+      <div class="summary-section">
+        <div class="summary-stat-row">
+          <div class="stat-box"><div class="stat-num" style="color:var(--accent)">${total}</div><div class="stat-lbl">Gedachten gedeeld</div></div>
+          <div class="stat-box"><div class="stat-num" style="color:var(--coach)">${sessionStats.coach}</div><div class="stat-lbl">Coach-reacties</div></div>
+        </div>
+      </div>
+      <div class="summary-section">
+        <h4>Welke stemmen waren actief?</h4>
+        <div class="summary-patterns">
+          ${[['catastrofe','🌪️'],[' criticus','👁️'],['dromer','✨']].map(([k,e])=>{
+            const c=characters[k.trim()];const val=sessionStats[k.trim()]||0;const pct=total?Math.round((val/total)*100):0;
+            return`<div class="pattern-row"><span style="width:130px;font-size:0.8rem">${e} ${c.name.replace('De ','')}</span><div class="pattern-bar-wrap"><div class="pattern-bar" style="width:${pct}%;background:${c.color}"></div></div><span style="font-size:0.78rem;color:var(--muted);width:30px;text-align:right">${pct}%</span></div>`;
+          }).join('')}
+        </div>
+      </div>
+      <div class="summary-insight"><strong>💡 Inzicht van vandaag:</strong><br>${insightText}</div>
+    `;
+  }
+  document.getElementById('summaryOverlay').classList.add('open');
+}
+function closeSummary(){document.getElementById('summaryOverlay').classList.remove('open');}
+document.getElementById('summaryOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('summaryOverlay'))closeSummary();});
 
 renderChars();
 </script>
